@@ -1,0 +1,43 @@
+"""Root BUILD.bzl
+
+Defines global rules such as Gazelle
+"""
+
+load("@bazel_gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+gazelle_binary(
+    name = "gazelle_binary",
+    languages = DEFAULT_LANGUAGES,
+    visibility = ["//visibility:public"],
+)
+
+# gazelle:prefix github.com/idlebot/monorepo
+gazelle(
+    name = "gazelle",
+    gazelle = "//:gazelle_binary",
+)
+
+gazelle(
+    name = "gazelle-update-repos",
+    args = [
+        "-from_file=go.mod",
+        "-to_macro=repositories.bzl%go_dependencies",
+        "-prune",
+    ],
+    command = "update-repos",
+)
+
+go_binary(
+    name = "monorepo",
+    embed = [":monorepo_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "monorepo_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/idlebot/monorepo",
+    visibility = ["//visibility:private"],
+    deps = ["//monorepo"],
+)

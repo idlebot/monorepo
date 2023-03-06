@@ -1,0 +1,18 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "shell",
+    srcs = [
+        "execute.go",
+        "profile.go",
+        "script.go",
+        "shell.go",
+    ],
+    importpath = "github.com/idlebot/monorepo/monorepo/internal/shell",
+    visibility = ["//monorepo:__subpackages__"],
+    deps = [
+        "//monorepo/global",
+        "//monorepo/internal/console",
+        "//monorepo/internal/file",
+    ],
+)

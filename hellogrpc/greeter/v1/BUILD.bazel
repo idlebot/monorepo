@@ -1,0 +1,10 @@
+load("@golink//proto:proto.bzl", "go_proto_link")
+
+# gazelle:exclude *.pb.go
+
+go_proto_link(
+    name = "v1_go_proto_link",
+    dep = "//hellogrpc/proto/greeter/v1:v1_go_proto",
+    version = "v1",
+    visibility = ["//visibility:public"],
+)

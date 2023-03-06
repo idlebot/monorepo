@@ -1,0 +1,52 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "prereq",
+    srcs = [
+        "prereq.go",
+        "prereq_darwin.go",
+        "prereq_darwin_amd64.go",
+        "prereq_darwin_arm64.go",
+        "prereq_linux.go",
+        "prereq_linux_amd64.go",
+    ],
+    importpath = "github.com/idlebot/monorepo/monorepo/internal/prereq",
+    visibility = ["//monorepo:__subpackages__"],
+    deps = [
+        "//monorepo/internal/console",
+    ] + select({
+        "@io_bazel_rules_go//go/platform:android": [
+            "//monorepo/internal/shell",
+        ],
+        "@io_bazel_rules_go//go/platform:linux": [
+            "//monorepo/internal/shell",
+        ],
+        "//conditions:default": [],
+    }) + select({
+        "@io_bazel_rules_go//go/platform:android_amd64": [
+            "//monorepo/global",
+        ],
+        "@io_bazel_rules_go//go/platform:darwin_386": [
+            "//monorepo/global",
+        ],
+        "@io_bazel_rules_go//go/platform:darwin_amd64": [
+            "//monorepo/global",
+        ],
+        "@io_bazel_rules_go//go/platform:darwin_arm": [
+            "//monorepo/global",
+        ],
+        "@io_bazel_rules_go//go/platform:darwin_arm64": [
+            "//monorepo/global",
+        ],
+        "@io_bazel_rules_go//go/platform:ios_amd64": [
+            "//monorepo/global",
+        ],
+        "@io_bazel_rules_go//go/platform:ios_arm64": [
+            "//monorepo/global",
+        ],
+        "@io_bazel_rules_go//go/platform:linux_amd64": [
+            "//monorepo/global",
+        ],
+        "//conditions:default": [],
+    }),
+)

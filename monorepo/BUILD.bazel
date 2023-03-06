@@ -1,0 +1,12 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "monorepo",
+    srcs = ["install.go"],
+    importpath = "github.com/idlebot/monorepo/monorepo",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//monorepo/internal/console",
+        "//monorepo/internal/prereq",
+    ],
+)

@@ -1,0 +1,12 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "git",
+    srcs = ["git.go"],
+    importpath = "github.com/idlebot/monorepo/monorepo/internal/tools/git",
+    visibility = ["//monorepo:__subpackages__"],
+    deps = [
+        "//monorepo/internal/shell",
+        "//monorepo/internal/tools/internal/tools",
+    ],
+)

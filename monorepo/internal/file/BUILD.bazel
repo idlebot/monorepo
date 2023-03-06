@@ -1,0 +1,23 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "file",
+    srcs = [
+        "copy.go",
+        "grep.go",
+        "read.go",
+        "sed.go",
+        "sha256.go",
+        "write.go",
+    ],
+    importpath = "github.com/idlebot/monorepo/monorepo/internal/file",
+    visibility = ["//monorepo:__subpackages__"],
+    deps = ["//monorepo/internal/console"],
+)
+
+go_test(
+    name = "file_test",
+    srcs = ["sed_test.go"],
+    embed = [":file"],
+    deps = ["@com_github_stretchr_testify//assert"],
+)
