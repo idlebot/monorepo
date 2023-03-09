@@ -22,6 +22,13 @@ all: gazelle-update-repos build
 .PHONY: clean-build
 clean-build: clean all
 
+.PHONY: install
+install:
+	cat .tool-versions | awk '{print $$1}' | xargs -L 1 echo asdf plugin add
+	asdf install
+	@echo Download go.mod dependencies
+	@go mod download
+
 .PHONY: test
 test: build
 	bazel test --test_verbose_timeout_warnings //...
