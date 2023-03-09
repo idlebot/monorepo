@@ -6,7 +6,7 @@ go_library(
     importpath = "github.com/idlebot/monorepo/hellogrpc",
     visibility = ["//visibility:private"],
     deps = [
-        "//hellogrpc/proto/greeter/v1:greeter",
+        "//hellogrpc/greeter/v1:greeter",
         "@org_golang_google_grpc//:go_default_library",
     ],
 )
