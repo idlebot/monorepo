@@ -9,3 +9,5 @@ fi
 
 # adds GOBIN directory to PATH
 export PATH=$(go env GOPATH)/bin:${PATH}
+
+source "$(asdf where bazel)/lib/bazel/bin/bazel-complete.bash"
