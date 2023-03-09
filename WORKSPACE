@@ -18,6 +18,7 @@ http_archive(
     ],
 )
 
+# golink is used to copy *.pb.go files back to the source directory for IDE support
 http_archive(
     name = "golink",
     sha256 = "c505a82b7180d4315bbaf05848e9b7d2683e80f1b16159af51a0ecae6fb2d54d",
