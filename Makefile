@@ -29,6 +29,7 @@ install:
 	asdf install
 	@echo Download go.mod dependencies
 	@go mod download
+	go install github.com/bazelbuild/buildtools/buildifier@latest
 
 .PHONY: test
 test: build
