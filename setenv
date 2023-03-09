@@ -8,6 +8,7 @@ if [[ "$_" == "$0" ]]; then
 fi
 
 # adds GOBIN directory to PATH
-export PATH=$(go env GOPATH)/bin:${PATH}
+PATH=$(go env GOPATH)/bin:${PATH}
+export PATH
 
 source "$(asdf where bazel)/lib/bazel/bin/bazel-complete.bash"
