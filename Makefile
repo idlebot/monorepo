@@ -14,6 +14,7 @@ default: build test
 
 .PHONY: build
 build: gazelle protolink test
+	bazel run //:buildifier
 	bazel build //...
 
 .PHONY: all
