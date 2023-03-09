@@ -2,11 +2,11 @@ package file
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 )
 
 func Read(filename string) (string, error) {
-	buffer, err := ioutil.ReadFile(filename)
+	buffer, err := os.ReadFile(filename)
 	if err != nil {
 		return "", fmt.Errorf("unable to read file '%s': %w", filename, err)
 	}
