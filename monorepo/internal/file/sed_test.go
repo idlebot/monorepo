@@ -36,7 +36,7 @@ if [ -z "$RUNNING" ]; then
     disown
 fi
 
-PATH=$PATH:/home/marcelou/.truepay/gcp-common-scripts`
+PATH=$PATH:/home/marcelou/.idlebot/gcp-common-scripts`
 
 	t.Run("AppendIfNotFound", func(t *testing.T) {
 		output, err := SedString(
@@ -57,7 +57,7 @@ PATH=$PATH:/home/marcelou/.truepay/gcp-common-scripts`
 			[]LineOperation{
 				ReplaceAll("PATH", "path"),
 				// will not found the line below as the operation above changes PATH to path
-				DeleteLine("PATH=$PATH:/home/marcelou/.truepay/gcp-common-scripts"),
+				DeleteLine("PATH=$PATH:/home/marcelou/.idlebot/gcp-common-scripts"),
 			},
 		)
 		assert.NoError(t, err)
@@ -65,7 +65,7 @@ PATH=$PATH:/home/marcelou/.truepay/gcp-common-scripts`
 		fmt.Println(output)
 		lines := strings.Split(output, "\n")
 
-		containsLine(t, "path=$path:/home/marcelou/.truepay/gcp-common-scripts", lines)
+		containsLine(t, "path=$path:/home/marcelou/.idlebot/gcp-common-scripts", lines)
 	})
 }
 
@@ -163,11 +163,11 @@ func TestRegExpReplace(t *testing.T) {
 	})
 
 	t.Run("ReplaceTerraformModuleVersion", func(t *testing.T) {
-		op := RegExpReplace(`"git@github\.com:truepay\/tf-truepay-modules.git\/\/modules\/(.*)\?ref=v\d+\.\d+\.\d+"`,
-			`"git@github.com:truepay/tf-truepay-modules.git//modules/$1?ref=v1.0.42"`,
+		op := RegExpReplace(`"git@github\.com:idlebot\/tf-modules.git\/\/modules\/(.*)\?ref=v\d+\.\d+\.\d+"`,
+			`"git@github.com:idlebot/tf-modules.git//modules/$1?ref=v1.0.42"`,
 		)
-		result := op.Execute(`  source       = "git@github.com:truepay/tf-truepay-modules.git//modules/domain_name?ref=v0.165.0"`)
-		assert.Equal(t, `  source       = "git@github.com:truepay/tf-truepay-modules.git//modules/domain_name?ref=v1.0.42"`, result[0])
+		result := op.Execute(`  source       = "git@github.com:idlebot/tf-modules.git//modules/domain_name?ref=v0.165.0"`)
+		assert.Equal(t, `  source       = "git@github.com:idlebot/tf-modules.git//modules/domain_name?ref=v1.0.42"`, result[0])
 	})
 }
 
