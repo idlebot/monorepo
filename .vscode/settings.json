@@ -1,0 +1,7 @@
+{
+    "shellcheck.customArgs": [
+        "-x",
+    ],
+    "shellcheck.useWorkspaceRootAsCwd": true,
+    "shellformat.flag": "-i 2"
+}

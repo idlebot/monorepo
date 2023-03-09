@@ -1,0 +1,11 @@
+# setenv is meant to initialize the environment before building
+# typically this needs to be called once when entering the project
+# directory
+
+if [[ "$_" == "$0" ]]; then
+  echo "must be called using source"
+  exit 1
+fi
+
+# adds GOBIN directory to PATH
+export PATH=$(go env GOPATH)/bin:${PATH}
