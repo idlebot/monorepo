@@ -24,7 +24,8 @@ clean-build: clean all
 
 .PHONY: install
 install:
-	cat .tool-versions | awk '{print $$1}' | xargs -L 1 echo asdf plugin add
+	asdf update
+	-cat .tool-versions | awk '{print $$1}' | xargs --no-run-if-empty -L 1 asdf plugin add
 	asdf install
 	@echo Download go.mod dependencies
 	@go mod download
@@ -43,7 +44,7 @@ gazelle-update-repos:
 
 .PHONY: protolink
 protolink:
-	bazel run //hellogrpc/greeter/v1:v1_go_proto_link
+	bazel query 'kind(".*_proto_link", //...)' | xargs -L 1 bazel run
 
 .PHONY: clean
 clean:
