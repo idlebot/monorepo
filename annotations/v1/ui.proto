@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package annotations.v1;
+option go_package = "github.com/idlebot/monorepo/annotations/v1;annotations";
+import "google/protobuf/descriptor.proto";
+
+message DocumentOptions {
+  string title = 1;
+  string description = 2;
+}
+
+extend google.protobuf.MessageOptions {
+  optional annotations.v1.DocumentOptions ui = 7000000;
+}

@@ -1,0 +1,188 @@
+
+{
+  "type": "object",
+  "title": "Carteira de Trabalho",
+  "description": "Obrigatório para prestar algum serviço profissional no Brasil.",
+  "required": ["attributes"],
+  "additionalProperties": false,
+  "minProperties": 2,
+  "maxProperties": 2,
+  "properties": {
+    "attributes": {
+      "description": "Dados do documento",
+      "type": "object",
+      "required": [
+        "numeroCarteiraTrabalho",
+        "serieCarteiraTrabalho",
+        "uf",
+        "dataEmissao"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "numeroCarteiraTrabalho": {
+          "type": "integer",
+          "title": "numero",
+          "description": "Número",
+          "$codes": {
+            "people": "numero"
+          }
+        },
+        "serieCarteiraTrabalho": {
+          "type": "string",
+          "title": "serie",
+          "description": "Série",
+          "$codes": {
+            "people": "serie"
+          }
+        },
+        "uf": {
+          "type": "string",
+          "title": "uf",
+          "description": "UF",
+          "$codes": {
+            "people": "uf"
+          },
+          "enum": [
+            "AC",
+            "AL",
+            "AM",
+            "AP",
+            "BA",
+            "CE",
+            "DF",
+            "ES",
+            "GO",
+            "MA",
+            "MT",
+            "MS",
+            "MG",
+            "PA",
+            "PB",
+            "PR",
+            "PE",
+            "PI",
+            "RJ",
+            "RN",
+            "RS",
+            "RO",
+            "RR",
+            "SC",
+            "SP",
+            "SE",
+            "TO"
+          ]
+        },
+        "dataEmissao": {
+          "type": "string",
+          "format": "date",
+          "title": "dataEmissao",
+          "description": "Data de emissão",
+          "$codes": {
+            "people": "dataEmissao"
+          }
+        },
+        "dataValidade": {
+          "type": "string",
+          "format": "date",
+          "title": "dataValidade",
+          "description": "Data de validade",
+          "$codes": {
+            "people": "dataValidade"
+          }
+        }
+      }
+    },
+    "files": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["frente", "verso", "pagina22", "anotacoes"],
+          "contentTypes": ["camera"],
+          "additionalProperties": false,
+          "properties": {
+            "frente": {
+              "title": "Frente",
+              "type": "string",
+              "$codes": {
+                "people": "frente"
+              }
+            },
+            "verso": {
+              "title": "Verso",
+              "type": "string",
+              "$codes": {
+                "people": "verso"
+              }
+            },
+            "pagina22": {
+              "title": "Página 22",
+              "type": "string",
+              "$codes": {
+                "people": "pagina22"
+              }
+            },
+            "anotacoes": {
+              "title": "Anotações",
+              "type": "string",
+              "$codes": {
+                "people": "anotacoes"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["comprovante"],
+          "contentTypes": ["file/pdf"],
+          "additionalProperties": false,
+          "properties": {
+            "comprovante": {
+              "title": "Comprovante",
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "vouchers": {
+      "title": "Comprovantes do documento",
+      "type": "object",
+      "required": ["frente", "verso", "pagina22", "anotacoes"],
+      "additionalProperties": false,
+      "properties": {
+        "frente": {
+          "title": "frente",
+          "description": "Frente",
+          "type": "string",
+          "$codes": {
+            "people": "frente"
+          }
+        },
+        "verso": {
+          "title": "verso",
+          "description": "Verso",
+          "type": "string",
+          "$codes": {
+            "people": "verso"
+          }
+        },
+        "pagina22": {
+          "title": "pagina22",
+          "description": "Página 22",
+          "type": "string",
+          "$codes": {
+            "people": "pagina22"
+          }
+        },
+        "anotacoes": {
+          "title": "anotacoes",
+          "description": "Anotações",
+          "type": "string",
+          "$codes": {
+            "people": "anotacoes"
+          }
+        }
+      }
+    }
+  }
+}

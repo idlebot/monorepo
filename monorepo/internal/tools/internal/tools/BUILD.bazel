@@ -1,8 +1,0 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
-
-go_library(
-    name = "tools",
-    srcs = ["path.go"],
-    importpath = "github.com/idlebot/monorepo/monorepo/internal/tools/internal/tools",
-    visibility = ["//monorepo:__subpackages__"],
-)

@@ -1,7 +1,39 @@
 {
-    "shellcheck.customArgs": [
-        "-x",
+  "shellcheck.customArgs": [
+    "-x",
+  ],
+  "shellcheck.useWorkspaceRootAsCwd": true,
+  "shellformat.flag": "-i 2",
+  "go.goroot": "${workspaceFolder}/bazel-${workspaceFolderBasename}/external/go_sdk",
+  "go.toolsEnvVars": {
+    "GOPACKAGESDRIVER": "${workspaceFolder}/tools/gopackagesdriver.sh"
+  },
+  "go.enableCodeLens": {
+    "runtest": false
+  },
+  "gopls": {
+    "build.directoryFilters": [
+      "-bazel-bin",
+      "-bazel-out",
+      "-bazel-testlogs",
+      "-bazel-mypkg",
     ],
-    "shellcheck.useWorkspaceRootAsCwd": true,
-    "shellformat.flag": "-i 2"
+    "formatting.gofumpt": true,
+    "formatting.local": "github.com/idlebot/monorepo",
+    "ui.completion.usePlaceholders": true,
+    "ui.semanticTokens": true,
+    "ui.codelenses": {
+      "gc_details": false,
+      "regenerate_cgo": false,
+      "generate": false,
+      "test": false,
+      "tidy": false,
+      "upgrade_dependency": false,
+      "vendor": false
+    },
+  },
+  "go.useLanguageServer": true,
+  "go.buildOnSave": "off",
+  "go.lintOnSave": "off",
+  "go.vetOnSave": "off",
 }

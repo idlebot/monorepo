@@ -1,0 +1,40 @@
+load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
+# gazelle:resolve proto proto validate/validate.proto @com_envoyproxy_protoc_gen_validate//validate:validate_proto
+proto_library(
+    name = "dictionary_proto",
+    srcs = ["carteira_de_trabalho.proto"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//annotations/v1:annotations_proto",
+        "@com_envoyproxy_protoc_gen_validate//validate:validate_proto",
+        "@com_google_protobuf//:wrappers_proto",
+        "@go_googleapis//google/type:date_proto",
+    ],
+)
+
+# gazelle:resolve proto go validate/validate.proto @com_envoyproxy_protoc_gen_validate//validate:validate_go_proto
+go_proto_library(
+    name = "dictionary_go_proto",
+    importpath = "github.com/idlebot/monorepo/dictionary/v1",
+    proto = ":dictionary_proto",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//annotations/v1:annotations",
+        "@com_envoyproxy_protoc_gen_validate//validate:validate_go_proto",
+        "@go_googleapis//google/type:date_go_proto",
+    ],
+)
+
+go_library(
+    name = "dictionary",
+    srcs = [
+        "carteira_de_trabalho.go",
+        "tools.go",
+    ],
+    embed = [":dictionary_go_proto"],
+    importpath = "github.com/idlebot/monorepo/dictionary/v1",
+    visibility = ["//visibility:public"],
+)

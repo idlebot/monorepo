@@ -10,7 +10,7 @@
 syntax = "proto3";
 
 package hellogrpc.greeter.v1;
-option go_package = "github.com/idlebot/monorepo/hellogrpc/greeter/v1";
+option go_package = "github.com/idlebot/monorepo/hellogrpc/greeter/v1;greeter";
 import "google/api/annotations.proto";
 
 // The greeting service definition.

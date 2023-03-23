@@ -10,10 +10,10 @@ export GO111MODULE := on
 .DEFAULT_GOAL := default
 
 .PHONY: default
-default: build test
+default: build
 
 .PHONY: build
-build: gazelle protolink test
+build: gazelle
 	bazel run //:buildifier
 	bazel build //...
 
@@ -44,9 +44,9 @@ gazelle:
 gazelle-update-repos:
 	bazel run //:gazelle-update-repos
 
-.PHONY: protolink
-protolink:
-	bazel query 'kind(".*_proto_link", //...)' | xargs -L 1 bazel run
+# .PHONY: protolink
+# protolink:
+# 	bazel query 'kind(".*_proto_link", //...)' | xargs -L 1 bazel run
 
 .PHONY: clean
 clean:

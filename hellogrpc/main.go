@@ -28,13 +28,13 @@ import (
 	"os"
 	"strconv"
 
-	greeter "github.com/idlebot/monorepo/hellogrpc/greeter/v1"
 	"google.golang.org/grpc"
+
+	dictionary "github.com/idlebot/monorepo/dictionary/v1"
+	greeter "github.com/idlebot/monorepo/hellogrpc/greeter/v1"
 )
 
-var (
-	port *int
-)
+var port *int
 
 // server is used to implement greeter.GreeterServer.
 type server struct {
@@ -48,6 +48,7 @@ func (s *server) Hello(ctx context.Context, in *greeter.HelloRequest) (*greeter.
 }
 
 func main() {
+	dictionary.Hello()
 	flag.Parse()
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {

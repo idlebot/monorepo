@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package dictionary.v1;
+option go_package = "github.com/idlebot/monorepo/dictionary/v1;dictionary";
+import "google/protobuf/wrappers.proto";
+import "google/type/date.proto";
+import "validate/validate.proto";
+import "annotations/v1/ui.proto";
+
+enum UF {
+  UF_UNSPECIFIED = 0;
+  UF_AC = 1;
+  UF_AL = 2;
+  UF_AM = 3;
+  UF_AP = 4;
+  UF_BA = 5;
+  UF_CE = 6;
+  UF_DF = 7;
+  UF_ES = 8;
+  UF_GO = 9;
+  UF_MA = 10;
+  UF_MT = 11;
+  UF_MS = 12;
+  UF_MG = 13;
+  UF_PA = 14;
+  UF_PB = 15;
+  UF_PR = 16;
+  UF_PE = 17;
+  UF_PI = 18;
+  UF_RJ = 19;
+  UF_RN = 20;
+  UF_RS = 21;
+  UF_RO = 22;
+  UF_RR = 23;
+  UF_SC = 24;
+  UF_SP = 25;
+  UF_SE = 26;
+  UF_TO = 27;
+}
+// (
+// '0f98ddee-7bb0-4b32-a849-99d297202a81',
+// 'Carteira de Trabalho',
+// 'Obrigatório para prestar algum serviço profissional no Brasil.',
+// 1,
+// 'carteira_trabalho',
+// 'https://firebasestorage.googleapis.com/v0/b/acesso-unico-prod.appspot.com/o/attribute_images%2Fcateira_trabalho%2Fim_carteira_trabalho.png?alt=media&token=6031728d-52db-49d2-b3b1-c41bf5b32d15',
+// 'https://firebasestorage.googleapis.com/v0/b/acesso-unico-prod.appspot.com/o/attribute_images%2Fcateira_trabalho%2Fim_carteira_trabalho_small.png?alt=media&token=1da5e1e2-1c05-4335-8676-5af204e5656d',
+// '{"color":
+// "ff0053b7","illustration":{"small":"https://firebasestorage.googleapis.com/v0/b/acesso-unico-prod.appspot.com/o/documents_mvp%2Fcarteira_de_trabalho%2Fcarteira_de_trabalho-small.png?alt=media&token=9bb681e3-f058-4050-81f0-aa49c86f63c2"}}',
+// '{"values": ["carteira de trabalho"]}',
+
+message CarteiraDeTrabalho {
+  option (annotations.v1.ui) = {
+    title : "Carteira de Trabalho",
+    description : "Obrigatório para prestar algum serviço profissional no "
+                  "Brasil."
+  };
+  google.protobuf.UInt32Value numero_carteira_trabalho = 1
+      [ (validate.rules).message.required = true ];
+
+  google.protobuf.StringValue serie_carteira_trabalho = 2;
+  dictionary.v1.UF uf = 3;
+  google.type.Date data_emissao = 4;
+}
