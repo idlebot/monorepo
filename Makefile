@@ -14,8 +14,8 @@ default: build
 
 .PHONY: build
 build: gazelle
-	bazel run //:buildifier
-	bazel build //...
+	bazel run --jobs=6 //:buildifier
+	bazel build --jobs=6 //...
 
 .PHONY: all
 all: gazelle-update-repos build
@@ -25,8 +25,8 @@ clean-build: clean all
 
 .PHONY: install
 install:
-	asdf update
-	-cat .tool-versions | awk '{print $$1}' | xargs --no-run-if-empty -L 1 asdf plugin add
+	-asdf update
+	-cat .tool-versions | awk '{print $$1}' | xargs -L 1 asdf plugin add
 	asdf install
 	@echo Download go.mod dependencies
 	@go mod download
@@ -38,15 +38,11 @@ test: build
 
 .PHONY: gazelle
 gazelle:
-	bazel run //:gazelle -- update
+	bazel run --jobs=6 //:gazelle -- update
 
 .PHONY: gazelle-update-repos
 gazelle-update-repos:
-	bazel run //:gazelle-update-repos
-
-# .PHONY: protolink
-# protolink:
-# 	bazel query 'kind(".*_proto_link", //...)' | xargs -L 1 bazel run
+	bazel run --jobs=6 //:gazelle-update-repos
 
 .PHONY: clean
 clean:

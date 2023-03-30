@@ -11,4 +11,13 @@ fi
 PATH=$(go env GOPATH)/bin:${PATH}
 export PATH
 
-source "$(asdf where bazel)/lib/bazel/bin/bazel-complete.bash"
+GOPACKAGESDRIVER="$(pwd)/tools/gopackagesdriver.sh"
+export GOPACKAGESDRIVER
+
+if [ -n "$BASH_VERSION" ]; then
+  # shellcheck disable=SC1091
+  source "$(asdf where bazel)/lib/bazel/bin/bazel-complete.bash"
+fi
+
+JAVA_HOME="$(asdf where java)"
+export JAVA_HOME
