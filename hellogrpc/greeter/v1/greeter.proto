@@ -11,10 +11,17 @@ syntax = "proto3";
 
 package hellogrpc.greeter.v1;
 option go_package = "github.com/idlebot/monorepo/hellogrpc/greeter/v1;greeter";
-import "google/api/annotations.proto";
+option java_multiple_files = true;
+option java_outer_classname = "GreeterProto";
+option java_package = "com.github.idlebot.monorepo.hellogrpc.greeter.v1";
 
+import "google/api/annotations.proto";
+import "google/api/client.proto";
+  
 // The greeting service definition.
 service Greeter {
+  option (google.api.default_host) = "greeter.googleapis.com";
+
   // Sends a greeting
   rpc Hello(HelloRequest) returns (HelloReply) {
     option (google.api.http) = {

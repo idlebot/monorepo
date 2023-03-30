@@ -1,0 +1,16 @@
+type: google.api.Service
+config_version: 3
+name: localhost:8888
+title: Greeter API
+
+apis:
+- name: hellogrpc.greeter.v1.Greeter
+
+documentation:
+  summary: |-
+    Hello gRPC API
+
+backend:
+  rules:
+  - selector: '*'
+    deadline: 600.0

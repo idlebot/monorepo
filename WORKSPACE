@@ -281,6 +281,13 @@ maven_install(
     ],
 )
 
+http_archive(
+    name = "gapic_generator_java",
+    sha256 = "752a930d4d0f6c287265eaa513ff8341b5fbb2aa60ec90a3d3e92934225a79d2",
+    strip_prefix = "gapic-generator-java-%s" % _gapic_generator_java_version,
+    urls = ["https://github.com/googleapis/gapic-generator-java/archive/v%s.zip" % _gapic_generator_java_version],
+)
+
 _io_grpc_grpc_java_version = "1.53.0"
 
 http_archive(
@@ -288,13 +295,6 @@ http_archive(
     sha256 = "fd0a649d03a8da06746814f414fb4d36c1b2f34af2aad4e19ae43f7c4bd6f15e",
     strip_prefix = "grpc-java-%s" % _io_grpc_grpc_java_version,
     urls = ["https://github.com/grpc/grpc-java/archive/refs/tags/v%s.tar.gz" % _io_grpc_grpc_java_version],
-)
-
-http_archive(
-    name = "gapic_generator_java",
-    sha256 = "752a930d4d0f6c287265eaa513ff8341b5fbb2aa60ec90a3d3e92934225a79d2",
-    strip_prefix = "gapic-generator-java-%s" % _gapic_generator_java_version,
-    urls = ["https://github.com/googleapis/gapic-generator-java/archive/v%s.zip" % _gapic_generator_java_version],
 )
 
 # gax-java is part of gapic-generator-java repository
@@ -354,9 +354,9 @@ gapic_generator_register_toolchains()
 # TypeScript
 ##############################################################################
 
-_gapic_generator_typescript_version = "3.0.3"
+_gapic_generator_typescript_version = "3.0.4"
 
-_gapic_generator_typescript_sha256 = "f79b4517873f69ea09621b511aade2e039bcfc37f19342a135bf45eaa6f60595"
+_gapic_generator_typescript_sha256 = "24e7d2e36930f31825c74b4d29d58a80b7e292f372e5789cdcce3887de222793"
 
 ### TypeScript generator
 http_archive(
@@ -406,9 +406,9 @@ pnpm_repository(name = "pnpm")
 ##############################################################################
 
 # Required to access the C#-specific common resources config.
-_gax_dotnet_version = "Google.Api.Gax-3.3.0"
+_gax_dotnet_version = "Google.Api.Gax-4.3.1"
 
-_gax_dotnet_sha256 = "c4d31345a226987e8551cb81afa685c9322d3f806077d9f02011676cf00c15d9"
+_gax_dotnet_sha256 = "f3684a6c352012b511b2f49707788a78a31f601ea10447d21ef225874f7f4d23"
 
 http_archive(
     name = "gax_dotnet",

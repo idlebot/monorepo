@@ -1,0 +1,13 @@
+{
+  "methodConfig": [
+    {
+      "name": [
+        {
+          "service": "hellogrpc.greeter.v1.Greeter",
+          "method": "Hello"
+        }
+      ],
+      "timeout": "600s"
+    }
+  ]
+}

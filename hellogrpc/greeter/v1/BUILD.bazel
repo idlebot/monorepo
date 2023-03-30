@@ -1,12 +1,99 @@
 load("@rules_proto//proto:defs.bzl", "proto_library")
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
-load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+load(
+    "@com_google_googleapis_imports//:imports.bzl",
+    "cc_grpc_library",
+    "cc_proto_library",
+    "csharp_gapic_assembly_pkg",
+    "csharp_gapic_library",
+    "csharp_grpc_library",
+    "csharp_proto_library",
+    "go_gapic_assembly_pkg",
+    "go_library",
+    "go_proto_library",
+    "go_test",
+    "java_gapic_assembly_gradle_pkg",
+    "java_gapic_library",
+    "java_gapic_test",
+    "java_grpc_library",
+    "java_proto_library",
+    "nodejs_gapic_assembly_pkg",
+    "nodejs_gapic_library",
+    "proto_library_with_info",
+    "py_gapic_assembly_pkg",
+    "py_gapic_library",
+    "py_test",
+)
+load("//:rules/gapic-go/rules.bzl", "go_gapic_library")
 
+# gazelle:resolve proto proto google/api/annotations.proto @go_googleapis//google/api:annotations_proto
+# gazelle:resolve proto proto google/api/client.proto @go_googleapis//google/api:client_proto
+# gazelle:resolve proto proto google/cloud/common_resources.proto @go_googleapis//google/cloud:common_resources_proto
 proto_library(
     name = "v1_proto",
     srcs = ["greeter.proto"],
     visibility = ["//visibility:public"],
-    deps = ["@go_googleapis//google/api:annotations_proto"],
+    deps = [
+        "@go_googleapis//google/api:annotations_proto",
+        "@go_googleapis//google/api:client_proto",
+        "@go_googleapis//google/cloud:common_resources_proto",
+    ],
+)
+
+proto_library_with_info(
+    name = "v1_proto_with_info",
+    deps = [
+        ":v1_proto",
+    ],
+)
+
+java_proto_library(
+    name = "v1_java_proto",
+    deps = [":v1_proto"],
+)
+
+java_grpc_library(
+    name = "v1_java_grpc",
+    srcs = [":v1_proto"],
+    deps = [":v1_java_proto"],
+)
+
+java_gapic_library(
+    name = "v1_java_gapic",
+    srcs = [":v1_proto_with_info"],
+    gapic_yaml = "greeter_gapic.yaml",
+    grpc_service_config = "greeter_grpc_service_config.json",
+    rest_numeric_enums = True,
+    service_yaml = "greeter.yaml",
+    test_deps = [
+        ":v1_java_grpc",
+    ],
+    transport = "grpc+rest",
+    deps = [
+        ":v1_java_proto",
+        "@go_googleapis//google/api:annotations_proto",
+    ],
+)
+
+java_gapic_test(
+    name = "v1_java_gapic_test_suite",
+    test_classes = [
+        "com.github.idlebot.monorepo.hellogrpc.greeter.v1.GreeterClientHttpJsonTest",
+        "com.github.idlebot.monorepo.hellogrpc.greeter.v1.GreeterClientTest",
+    ],
+    runtime_deps = [":v1_java_gapic_test"],
+)
+
+# Open Source Packages
+java_gapic_assembly_gradle_pkg(
+    name = "hellogrpc-greeter-v1-java",
+    include_samples = True,
+    transport = "grpc+rest",
+    deps = [
+        ":v1_java_gapic",
+        ":v1_java_grpc",
+        ":v1_java_proto",
+        ":v1_proto",
+    ],
 )
 
 go_proto_library(
@@ -18,9 +105,141 @@ go_proto_library(
     deps = ["@go_googleapis//google/api:annotations_go_proto"],
 )
 
-go_library(
-    name = "greeter",
-    embed = [":v1_go_proto"],
-    importpath = "github.com/idlebot/monorepo/hellogrpc/greeter/v1",
+go_gapic_library(
+    name = "v1_go_gapic",
+    srcs = [
+        ":v1_proto_with_info",
+    ],
+    grpc_service_config = "greeter_grpc_service_config.json",
+    importpath = "github.com/idlebot/monorepo/hellogrpc/greeter/v1/client;greetercli",
+    rest_numeric_enums = True,
+    service_yaml = "greeter.yaml",
+    transport = "grpc+rest",
     visibility = ["//visibility:public"],
+    deps = [
+        ":v1_go_proto",
+    ],
+)
+
+go_library(
+    name = "v1_go_client",
+    embed = [":v1_go_gapic"],
+    importpath = "github.com/idlebot/monorepo/hellogrpc/greeter/v1/client/greetercli",
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "v1_go_gapic_test",
+    srcs = [":v1_go_gapic_srcjar_test"],
+    embed = [":v1_go_gapic"],
+    importpath = "github.com/idlebot/monorepo/hellogrpc/greeter/v1/client",
+)
+
+# Open Source Packages
+go_gapic_assembly_pkg(
+    name = "hellogrpc-greeter-v1-go",
+    deps = [
+        ":v1_go_gapic",
+        ":v1_go_gapic_srcjar-test.srcjar",
+        ":v1_go_proto",
+    ],
+)
+
+py_gapic_library(
+    name = "v1_py_gapic",
+    srcs = [":v1_proto"],
+    grpc_service_config = "greeter_grpc_service_config.json",
+    opt_args = ["python-gapic-namespace=hellogrpc.greeter"],
+    rest_numeric_enums = True,
+    service_yaml = "greeter.yaml",
+    transport = "grpc+rest",
+)
+
+py_test(
+    name = "v1_py_gapic_test",
+    srcs = [
+        "v1_py_gapic_pytest.py",
+        "v1_py_gapic_test.py",
+    ],
+    legacy_create_init = False,
+    deps = [":v1_py_gapic"],
+)
+
+py_gapic_assembly_pkg(
+    name = "hellogrpc-greeter-v1-py",
+    deps = [
+        ":v1_py_gapic",
+    ],
+)
+
+nodejs_gapic_library(
+    name = "v1_nodejs_gapic",
+    package_name = "@idlebot/greeter",
+    src = ":v1_proto_with_info",
+    extra_protoc_parameters = [
+        "metadata",
+        "template=typescript_gapic",
+    ],
+    grpc_service_config = "greeter_grpc_service_config.json",
+    handwritten_layer = True,
+    main_service = "greeter",
+    package = "hellogrpc.greeter.v1",
+    rest_numeric_enums = True,
+    service_yaml = "greeter.yaml",
+    transport = "grpc+rest",
+    deps = [],
+)
+
+nodejs_gapic_assembly_pkg(
+    name = "hellogrpc-greeter-v1-nodejs",
+    deps = [
+        ":v1_nodejs_gapic",
+        ":v1_proto",
+    ],
+)
+
+csharp_proto_library(
+    name = "v1_csharp_proto",
+    deps = [":v1_proto"],
+)
+
+csharp_grpc_library(
+    name = "v1_csharp_grpc",
+    srcs = [":v1_proto"],
+    deps = [":v1_csharp_proto"],
+)
+
+csharp_gapic_library(
+    name = "v1_csharp_gapic",
+    srcs = [":v1_proto_with_info"],
+    common_resources_config = "@gax_dotnet//:Google.Api.Gax/ResourceNames/CommonResourcesConfig.json",
+    grpc_service_config = "greeter_grpc_service_config.json",
+    rest_numeric_enums = True,
+    service_yaml = "greeter.yaml",
+    deps = [
+        ":v1_csharp_grpc",
+        ":v1_csharp_proto",
+    ],
+)
+
+# Open Source Packages
+csharp_gapic_assembly_pkg(
+    name = "hellogrpc-greeter-v1-csharp",
+    deps = [
+        ":v1_csharp_gapic",
+        ":v1_csharp_grpc",
+        ":v1_csharp_proto",
+    ],
+)
+
+cc_proto_library(
+    name = "v1_cc_proto",
+    deps = [":v1_proto"],
+)
+
+cc_grpc_library(
+    name = "v1_cc_grpc",
+    srcs = [":v1_proto"],
+    grpc_only = True,
+    deps = [":v1_cc_proto"],
 )
