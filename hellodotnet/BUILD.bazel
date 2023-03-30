@@ -1,0 +1,16 @@
+load(
+    "@rules_dotnet//dotnet:defs.bzl",
+    "csharp_binary",
+)
+
+# bazel run //hellodotnet:hello
+csharp_binary(
+    name = "hello",
+    srcs = ["hello.cs"],
+    private_deps = [
+        "@dotnet_deps//microsoft.netcore.app.ref",
+    ],
+    target_frameworks = ["net7.0"],
+    deps = [
+    ],
+)
