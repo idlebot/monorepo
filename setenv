@@ -17,7 +17,14 @@ export GOPACKAGESDRIVER
 if [ -n "$BASH_VERSION" ]; then
   # shellcheck disable=SC1091
   source "$(asdf where bazel)/lib/bazel/bin/bazel-complete.bash"
+  # shellcheck disable=SC1091
+  source "${HOME}/.asdf/plugins/dotnet-core/set-dotnet-home.bash"
+elif [ -n "$ZSH_VERSION" ]; then
+  # shellcheck disable=SC1091
+  source "${HOME}/.asdf/plugins/dotnet-core/set-dotnet-home.zsh"
 fi
 
 JAVA_HOME="$(asdf where java)"
 export JAVA_HOME
+
+DOTNET_ROOT=$(pwd)/.dotnet
