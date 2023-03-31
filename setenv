@@ -26,5 +26,3 @@ fi
 
 JAVA_HOME="$(asdf where java)"
 export JAVA_HOME
-
-DOTNET_ROOT=$(pwd)/.dotnet
