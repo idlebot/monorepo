@@ -31,6 +31,9 @@ install:
 	@echo Download go.mod dependencies
 	@go mod download
 	go install github.com/bazelbuild/buildtools/buildifier@latest
+	-dotnet new tool-manifest
+	-dotnet paket install
+	dotnet tool restore
 
 .PHONY: test
 test: build

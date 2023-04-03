@@ -5,6 +5,13 @@ Bazel/Go/Protobuf monorepo bootstrap proof of concept
 
 These steps needs to be run only once.
 
+### Install Build Pre-requisites
+
+Linux
+```Bash
+sudo apt install python3-dev zip build-essential
+```
+
 ### Install asdf
 
 asdf is a package manager that allows pinned tools versions. To install asdf follow the
