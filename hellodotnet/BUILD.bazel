@@ -8,9 +8,10 @@ csharp_binary(
     name = "hello",
     srcs = ["hello.cs"],
     private_deps = [
-        "@dotnet_deps//microsoft.netcore.app.ref",
+        "@paket.main//microsoft.netcore.app.ref",
     ],
     target_frameworks = ["net7.0"],
     deps = [
+        #  "//hellogrpc/greeter/v1:v1_go_gapic",
     ],
 )

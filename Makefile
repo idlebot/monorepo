@@ -47,6 +47,11 @@ gazelle:
 gazelle-update-repos:
 	bazel run --jobs=6 //:gazelle-update-repos
 
+.PHONY: paket2bazel
+paket2bazel:
+	dotnet paket install
+	bazel run @rules_dotnet//tools/paket2bazel:paket2bazel.exe -- --dependencies-file $(PWD)/paket.dependencies  --output-folder $(PWD)
+
 .PHONY: clean
 clean:
 	bazel clean --expunge

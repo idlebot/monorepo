@@ -1,0 +1,19 @@
+STORAGE: NONE
+RESTRICTION: == net7.0
+NUGET
+  remote: https://api.nuget.org/v3/index.json
+    Google.Protobuf (3.22.1)
+    Grpc.Core.Api (2.52)
+      System.Memory (>= 4.5.3)
+    Grpc.Net.Client (2.52)
+      Grpc.Net.Common (>= 2.52)
+      Microsoft.Extensions.Logging.Abstractions (>= 3.0.3)
+    Grpc.Net.Common (2.52)
+      Grpc.Core.Api (>= 2.52)
+    Grpc.Tools (2.53)
+    Microsoft.Extensions.Logging.Abstractions (7.0)
+    microsoft.netcore.app.ref (7.0.4)
+    Microsoft.NETCore.App.Runtime.linux-x64 (7.0.4)
+    Microsoft.NETCore.App.Runtime.osx-x64 (7.0.4)
+    Microsoft.NETCore.App.Runtime.win-x64 (7.0.4)
+    System.Memory (4.5.5)

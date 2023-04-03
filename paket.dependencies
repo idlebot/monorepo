@@ -1,0 +1,12 @@
+source https://api.nuget.org/v3/index.json
+
+storage: none
+framework: net7.0
+
+nuget microsoft.netcore.app.ref
+nuget Microsoft.NETCore.App.Runtime.win-x64
+nuget Microsoft.NETCore.App.Runtime.linux-x64
+nuget Microsoft.NETCore.App.Runtime.osx-x64
+nuget Grpc.Net.Client
+nuget Google.Protobuf
+nuget Grpc.Tools

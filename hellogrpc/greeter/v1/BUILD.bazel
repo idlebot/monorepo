@@ -200,12 +200,14 @@ nodejs_gapic_assembly_pkg(
 
 csharp_proto_library(
     name = "v1_csharp_proto",
+    visibility = ["//visibility:public"],
     deps = [":v1_proto"],
 )
 
 csharp_grpc_library(
     name = "v1_csharp_grpc",
     srcs = [":v1_proto"],
+    visibility = ["//visibility:public"],
     deps = [":v1_csharp_proto"],
 )
 
@@ -216,6 +218,7 @@ csharp_gapic_library(
     grpc_service_config = "greeter_grpc_service_config.json",
     rest_numeric_enums = True,
     service_yaml = "greeter.yaml",
+    visibility = ["//visibility:public"],
     deps = [
         ":v1_csharp_grpc",
         ":v1_csharp_proto",
