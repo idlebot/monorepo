@@ -189,24 +189,3 @@ def go_gapic_library(
         importpath = imp,
         visibility = visibility,
     )
-
-    test_file = ":%s-test.srcjar" % srcjar_name
-    test_dir = "%s_test" % srcjar_name
-
-    unzipped_srcjar(
-        name = test_dir,
-        srcjar = test_file,
-        extension = ".go",
-        **kwargs
-    )
-
-    if metadata:
-        metadata_file = ":%s-metadata.srcjar" % srcjar_name
-        metadata_dir = "%s_metadata" % srcjar_name
-
-        unzipped_srcjar(
-            name = metadata_dir,
-            srcjar = metadata_file,
-            extension = ".json",
-            **kwargs
-        )
