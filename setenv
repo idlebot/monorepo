@@ -24,5 +24,8 @@ elif [ -n "$ZSH_VERSION" ]; then
   source "${HOME}/.asdf/plugins/dotnet-core/set-dotnet-home.zsh"
 fi
 
+PATH=${PATH}:${DOTNET_ROOT}:${HOME}/.dotnet/tools
+export PATH
+
 JAVA_HOME="$(asdf where java)"
 export JAVA_HOME
