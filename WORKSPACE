@@ -189,7 +189,7 @@ http_archive(
 # dependencies of gapic-generator-go.
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 
-go_register_toolchains(version = "1.20.2")
+go_register_toolchains(version = "1.20.3")
 
 go_rules_dependencies()
 
@@ -429,6 +429,19 @@ http_archive(
     urls = ["https://github.com/googleapis/gax-dotnet/archive/refs/tags/%s.tar.gz" % _gax_dotnet_version],
 )
 
+rules_dotnet_dependencies()
+
+# Here you can specify the version of the .NET SDK to use.
+dotnet_register_toolchains("dotnet", "7.0.200")
+
+rules_dotnet_nuget_packages()
+
+paket2bazel_dependencies()
+
+load("//:paket.bzl", "paket")
+
+paket()
+
 _gapic_generator_csharp_version = "1.4.11"
 
 _gapic_generator_csharp_sha256 = "40bb2ecf1e540df8f58bdca15c48e3da6fbdddc9c5786421b858222fb4e25202"
@@ -442,17 +455,4 @@ http_archive(
 
 load("@gapic_generator_csharp//:repositories.bzl", "gapic_generator_csharp_repositories")
 
-rules_dotnet_dependencies()
-
-# Here you can specify the version of the .NET SDK to use.
-dotnet_register_toolchains("dotnet", "7.0.101")
-
-rules_dotnet_nuget_packages()
-
 gapic_generator_csharp_repositories()
-
-paket2bazel_dependencies()
-
-load("//:paket.bzl", "paket")
-
-paket()
