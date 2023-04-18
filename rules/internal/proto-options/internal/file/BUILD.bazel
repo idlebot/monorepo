@@ -1,0 +1,20 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "file",
+    srcs = [
+        "grep.go",
+        "sed.go",
+    ],
+    importpath = "github.com/idlebot/monorepo/rules/internal/proto-options/internal/file",
+    visibility = ["//rules:__subpackages__"],
+    deps = ["//rules/internal/proto-options/internal/console"],
+)
+
+go_test(
+    name = "file_test",
+    size = "small",
+    srcs = ["sed_test.go"],
+    embed = [":file"],
+    deps = ["@com_github_stretchr_testify//assert"],
+)

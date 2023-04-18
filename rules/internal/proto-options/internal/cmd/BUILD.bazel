@@ -1,0 +1,24 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "cmd",
+    srcs = [
+        "service_name.go",
+        "settings.go",
+    ],
+    importpath = "github.com/idlebot/monorepo/rules/internal/proto-options/internal/cmd",
+    visibility = ["//rules:__subpackages__"],
+    deps = ["//rules/internal/proto-options/internal/file"],
+)
+
+go_test(
+    name = "cmd_test",
+    size = "small",
+    srcs = [
+        "service_name_test.go",
+        "settings_test.go",
+    ],
+    data = ["testdata/input.proto"],
+    embed = [":cmd"],
+    deps = ["@com_github_stretchr_testify//assert"],
+)

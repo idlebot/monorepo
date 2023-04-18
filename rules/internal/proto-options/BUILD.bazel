@@ -1,0 +1,19 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "proto-options_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/idlebot/monorepo/rules/internal/proto-options",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//rules/internal/proto-options/internal/cmd",
+        "//rules/internal/proto-options/internal/console",
+        "//rules/internal/proto-options/internal/generator",
+    ],
+)
+
+go_binary(
+    name = "proto-options",
+    embed = [":proto-options_lib"],
+    visibility = ["//rules:__subpackages__"],
+)

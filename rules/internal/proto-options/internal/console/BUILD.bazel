@@ -1,0 +1,15 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "console",
+    srcs = [
+        "color.go",
+        "error.go",
+        "info.go",
+        "print_color.go",
+        "settings.go",
+        "verbose.go",
+    ],
+    importpath = "github.com/idlebot/monorepo/rules/internal/proto-options/internal/console",
+    visibility = ["//rules:__subpackages__"],
+)

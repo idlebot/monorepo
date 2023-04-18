@@ -3,7 +3,7 @@
 Defines global rules such as Gazelle
 """
 
-load("@bazel_gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
+load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 
 buildifier(
@@ -12,11 +12,20 @@ buildifier(
 
 gazelle_binary(
     name = "gazelle_binary",
-    languages = DEFAULT_LANGUAGES,
+    languages = [
+        "@bazel_gazelle//language/proto:go_default_library",
+        "@bazel_gazelle//language/go:go_default_library",
+    ],
     visibility = ["//visibility:public"],
 )
 
 # gazelle:prefix github.com/idlebot/monorepo
+
+# prevents Gazelle from generating rules for testdata directory
+# gazelle:exclude **/testdata
+
+# prevents Gazelle from generating rules for the client directory
+##### xgazelle:exclude **/v*/client
 
 gazelle(
     name = "gazelle",

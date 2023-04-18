@@ -1,0 +1,10 @@
+package package.v1;
+
+option go_package = "github.com/hello/world/package/v1;packagev1";
+option java_multiple_files = false;
+option java_outer_classname = "OnlyPackageNameWithVersionProto";
+option java_package = "com.github.hello.world.package.v1";
+option csharp_namespace = "Package.V1";
+option php_namespace = "Package\\V1";
+option ruby_package = "Package::V1";
+option objc_class_prefix = "HWM";

@@ -1,0 +1,24 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "generator",
+    srcs = [
+        "execute.go",
+        "settings.go",
+    ],
+    importpath = "github.com/idlebot/monorepo/rules/internal/proto-options/internal/generator",
+    visibility = ["//rules:__subpackages__"],
+    deps = ["//rules/internal/proto-options/internal/file"],
+)
+
+go_test(
+    name = "generator_test",
+    size = "small",
+    srcs = ["execute_test.go"],
+    data = glob(["testdata/*"]),
+    embed = [":generator"],
+    deps = [
+        "//rules/internal/proto-options/internal/cmd",
+        "@com_github_stretchr_testify//assert",
+    ],
+)
