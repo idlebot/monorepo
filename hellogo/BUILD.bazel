@@ -1,18 +1,20 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
 
 go_library(
-    name = "hellogrpc_lib",
+    name = "hellogo_lib",
     srcs = ["main.go"],
-    importpath = "github.com/idlebot/monorepo/hellogrpc",
+    importpath = "github.com/idlebot/monorepo/hellogo",
     visibility = ["//visibility:private"],
     deps = [
         "//hellogrpc/greeter/v1:v1_go_proto",
+        "//hellogrpc/greeter/v1/client",
+        "@org_golang_google_api//option",
         "@org_golang_google_grpc//:go_default_library",
     ],
 )
 
 go_binary(
-    name = "hellogrpc",
-    embed = [":hellogrpc_lib"],
+    name = "hellogo",
+    embed = [":hellogo_lib"],
     visibility = ["//visibility:public"],
 )

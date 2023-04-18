@@ -1,6 +1,6 @@
 type: google.api.Service
 config_version: 3
-name: localhost:8888
+name: localhost:5432
 title: Greeter API
 
 apis:

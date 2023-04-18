@@ -1,4 +1,6 @@
 load("@rules_proto//proto:defs.bzl", "proto_library")
+load("//rules/gapic-csharp:def.bzl", "debug")
+load("//rules/gapic-go:def.bzl", "go_gapic_library")
 load(
     "@com_google_googleapis_imports//:imports.bzl",
     "cc_grpc_library",
@@ -8,7 +10,6 @@ load(
     "csharp_grpc_library",
     "csharp_proto_library",
     "go_gapic_assembly_pkg",
-    "go_library",
     "go_proto_library",
     "go_test",
     "java_gapic_assembly_gradle_pkg",
@@ -22,15 +23,17 @@ load(
     "py_gapic_assembly_pkg",
     "py_gapic_library",
     "py_test",
+    _csharp_gapic_library = "csharp_gapic_library",  # @unused
 )
-load("//:rules/gapic-go/rules.bzl", "go_gapic_library")
 
 # gazelle:resolve proto proto google/api/annotations.proto @go_googleapis//google/api:annotations_proto
 # gazelle:resolve proto proto google/api/client.proto @go_googleapis//google/api:client_proto
 # gazelle:resolve proto proto google/cloud/common_resources.proto @go_googleapis//google/cloud:common_resources_proto
 proto_library(
     name = "v1_proto",
-    srcs = ["greeter.proto"],
+    srcs = [
+        "greeter.proto",
+    ],
     visibility = ["//visibility:public"],
     deps = [
         "@go_googleapis//google/api:annotations_proto",
@@ -119,13 +122,6 @@ go_gapic_library(
     deps = [
         ":v1_go_proto",
     ],
-)
-
-go_library(
-    name = "v1_go_client",
-    embed = [":v1_go_gapic"],
-    importpath = "github.com/idlebot/monorepo/hellogrpc/greeter/v1/client/greetercli",
-    visibility = ["//visibility:public"],
 )
 
 go_test(
@@ -220,8 +216,6 @@ csharp_gapic_library(
     service_yaml = "greeter.yaml",
     visibility = ["//visibility:public"],
     deps = [
-        ":v1_csharp_grpc",
-        ":v1_csharp_proto",
     ],
 )
 
@@ -245,4 +239,9 @@ cc_grpc_library(
     srcs = [":v1_proto"],
     grpc_only = True,
     deps = [":v1_cc_proto"],
+)
+
+debug(
+    name = "v1_debug",
+    src = ":v1_proto",
 )

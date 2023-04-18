@@ -1,0 +1,11 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "client",
+    srcs = ["client.go"],
+    embed = [
+        "//hellogrpc/greeter/v1:v1_go_gapic",  # keep
+    ],
+    importpath = "github.com/idlebot/monorepo/hellogrpc/greeter/v1/client",
+    visibility = ["//visibility:public"],
+)

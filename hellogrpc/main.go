@@ -30,7 +30,6 @@ import (
 
 	"google.golang.org/grpc"
 
-	dictionary "github.com/idlebot/monorepo/dictionary/v1"
 	greeter "github.com/idlebot/monorepo/hellogrpc/greeter/v1"
 )
 
@@ -48,7 +47,6 @@ func (s *server) Hello(ctx context.Context, in *greeter.HelloRequest) (*greeter.
 }
 
 func main() {
-	dictionary.Hello()
 	flag.Parse()
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
