@@ -181,7 +181,12 @@ def go_gapic_library(
     # Strip the trailing package alias so that this
     # generated library can shade com_google_cloud_go
     # go_library targets.
-    imp = importpath[:importpath.index(";")]
+    separator_index = importpath.find(";")
+    if separator_index != -1:
+        imp = importpath[:separator_index]
+    else:
+        imp = importpath
+
     go_library(
         name = name,
         srcs = [":%s" % main_dir],

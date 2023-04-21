@@ -2,30 +2,46 @@
 # typically this needs to be called once when entering the project
 # directory
 
+add_to_path() {
+  local DIR="$1"
+  if ! [[ ":$PATH:" == *":$DIR:"* ]]; then
+    # adds $DIR directory to PATH
+    PATH=${DIR}:${PATH}
+    export PATH
+  fi
+}
+
 if [[ "$_" == "$0" ]]; then
   echo "must be called using source"
   exit 1
 fi
 
-# adds GOBIN directory to PATH
-PATH=$(go env GOPATH)/bin:${PATH}
-export PATH
+if [[ -z "$(command -v asdf)" ]] || [[ -z "$(command -v go)" ]]; then
+  echo "please run 'make install' first"
+  return
+fi
+
+add_to_path "$(go env GOPATH)/bin"
 
 GOPACKAGESDRIVER="$(pwd)/tools/gopackagesdriver.sh"
 export GOPACKAGESDRIVER
 
+if [[ -z "$(command -v dotnet)" ]]; then
+  echo "please run 'make install' first"
+  return
+fi
+
 if [ -n "$BASH_VERSION" ]; then
   # shellcheck disable=SC1091
   source "$(asdf where bazel)/lib/bazel/bin/bazel-complete.bash"
-  # shellcheck disable=SC1091
-  source "${HOME}/.asdf/plugins/dotnet-core/set-dotnet-home.bash"
-elif [ -n "$ZSH_VERSION" ]; then
-  # shellcheck disable=SC1091
-  source "${HOME}/.asdf/plugins/dotnet-core/set-dotnet-home.zsh"
 fi
+#elif [ -n "$ZSH_VERSION" ]; then
+#fi
 
-PATH=${PATH}:${DOTNET_ROOT}:${HOME}/.dotnet/tools
-export PATH
+DOTNET_ROOT="$(asdf where dotnet-core)"
+export DOTNET_ROOT
+add_to_path "${DOTNET_ROOT}"
+add_to_path "${HOME}/.dotnet/tools"
 
 JAVA_HOME="$(asdf where java)"
 export JAVA_HOME

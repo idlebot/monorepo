@@ -1,0 +1,26 @@
+load(
+    "@rules_dotnet//dotnet:defs.bzl",
+    "csharp_binary",
+)
+
+# bazel run //hellodotnet:hello
+csharp_binary(
+    name = "hellocsharp",
+    srcs = ["hello.cs"],
+    private_deps = [
+        "@paket.main//microsoft.netcore.app.ref",
+    ],
+    target_frameworks = ["net7.0"],
+    deps = [
+        "//hellocsharpcli:client",
+        "@paket.main//google.api.commonprotos",
+        "@paket.main//google.api.gax",
+        "@paket.main//google.api.gax.grpc",
+        "@paket.main//google.protobuf",
+        "@paket.main//grpc.core",
+        "@paket.main//grpc.core.api",
+        "@paket.main//grpc.net.client",
+        "@paket.main//microsoft.extensions.dependencyinjection.abstractions",
+        "@paket.main//microsoft.extensions.logging.abstractions",
+    ],
+)

@@ -3,10 +3,17 @@ source https://api.nuget.org/v3/index.json
 storage: none
 framework: net7.0
 
+nuget google.apis.auth
+nuget google.api.commonprotos
+nuget google.api.gax
+nuget google.api.gax.grpc
+nuget google.protobuf
+nuget grpc.core
+nuget grpc.core.api
+nuget grpc.net.client
+nuget grpc.tools
+nuget microsoft.extensions.configuration
 nuget microsoft.netcore.app.ref
-nuget Microsoft.NETCore.App.Runtime.win-x64
-nuget Microsoft.NETCore.App.Runtime.linux-x64
-nuget Microsoft.NETCore.App.Runtime.osx-x64
-nuget Grpc.Net.Client
-nuget Google.Protobuf
-nuget Grpc.Tools
+nuget microsoft.netcore.app.runtime.linux-x64
+nuget microsoft.netcore.app.runtime.osx-x64
+nuget microsoft.netcore.app.runtime.win-x64

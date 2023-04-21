@@ -1,6 +1,6 @@
 load("@rules_proto//proto:defs.bzl", "proto_library")
-load("//rules/gapic-csharp:def.bzl", "debug")
-load("//rules/gapic-go:def.bzl", "go_gapic_library")
+load("//buildtools/gapic/csharp:def.bzl", "debug")
+load("//buildtools/gapic/go:def.bzl", "go_gapic_library")
 load(
     "@com_google_googleapis_imports//:imports.bzl",
     "cc_grpc_library",

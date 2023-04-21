@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="google.api.commonprotos" Version="2.9.0" />
+    <PackageReference Include="Google.Api.Gax.Grpc" Version="4.3.1" />
+    <PackageReference Include="google.apis.auth" Version="1.60.0" />
+    <PackageReference Include="google.protobuf" Version="3.22.3" />
+    <PackageReference Include="grpc.core.api" Version="2.52.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.52.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.53.0" />
+    <PackageReference Include="microsoft.extensions.dependencyinjection.abstractions" Version="7.0.0" />
+    <PackageReference Include="microsoft.extensions.logging.abstractions" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\hellocsharpcli\HelloGrpc.Greeter.V1.csproj" />
+  </ItemGroup>
+
+</Project>

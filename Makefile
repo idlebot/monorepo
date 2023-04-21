@@ -25,12 +25,12 @@ clean-build: clean all
 
 .PHONY: install
 install:
-	-asdf update
-	-cat .tool-versions | awk '{print $$1}' | xargs -L 1 asdf plugin add
-	asdf install
+	@-asdf update
+	@-cat .tool-versions | awk '{print $$1}' | xargs -L 1 asdf plugin add
+	@asdf install
 	@echo Download go.mod dependencies
 	@go mod download
-	go install github.com/bazelbuild/buildtools/buildifier@latest
+	@go install github.com/bazelbuild/buildtools/buildifier@latest
 	-dotnet new tool-manifest
 	-dotnet paket install
 	dotnet tool restore

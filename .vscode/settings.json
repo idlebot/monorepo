@@ -38,4 +38,8 @@
   "go.vetOnSave": "off",
   "editor.codeActionsOnSave": {},
   "go.toolsGopath": "",
+  "files.exclude": {
+    "bazel-monorepo": true,
+    "bazel-out": true
+  },
 }
