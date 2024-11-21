@@ -64,7 +64,9 @@ bazel run //src/go/helloworld
 .
 ├── bin/           # Development tools and scripts
 ├── src/          
-│   └── go/        # Go source code
-│       └── helloworld/  # Example Go program
+│   ├── go/        # Go source code
+│   │   └── helloworld/  # Example Go program
+│   └── python/    # Python source code
+│       └── helloworld/  # Example Python program
 └── BUILD.bazel    # Root Bazel build file
 ```

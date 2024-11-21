@@ -1,0 +1,4 @@
+# Configuration for gazelle python extension
+manifest_name: "requirements.txt"
+pip_repository_name: "pip"
+python_interpreter: "python3"
