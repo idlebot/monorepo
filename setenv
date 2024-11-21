@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Create bin directory if it doesn't exist
+mkdir -p bin
+
+# Determine OS and architecture
+OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+ARCH=$(uname -m)
+case "$ARCH" in
+    "x86_64") ARCH="amd64" ;;
+    "aarch64"|"arm64") ARCH="arm64" ;;
+esac
+
+# Construct platform string
+PLATFORM="${OS}-${ARCH}"
+
+if [ -f "./bin/bazel" ]; then
+    # Check current version (remove any 'v' prefix for consistent comparison)
+    CURRENT_VERSION="$("./bin/bazel" version | grep "Bazelisk version" | cut -d' ' -f3 | sed 's/^v//')"
+    echo "Current Bazelisk version: $CURRENT_VERSION"
+fi
+
+# Get latest version from GitHub API (remove any 'v' prefix)
+LATEST_VERSION=$(curl -s "https://api.github.com/repos/bazelbuild/bazelisk/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/^v//')
+echo "Latest Bazelisk version: $LATEST_VERSION"
+
+# Download if file doesn't exist or version is different
+if [ ! -f "./bin/bazel" ] || [ "$CURRENT_VERSION" != "$LATEST_VERSION" ]; then
+    if [ -f "./bin/bazel" ] && [ "$CURRENT_VERSION" = "$LATEST_VERSION" ]; then
+        echo "Bazelisk is already up to date"
+    else
+        echo "Downloading bazelisk v${LATEST_VERSION} for ${PLATFORM}..."
+        curl -L "https://github.com/bazelbuild/bazelisk/releases/download/v${LATEST_VERSION}/bazelisk-${PLATFORM}" -o bin/bazel
+        chmod +x bin/bazel
+    fi
+fi
+
+# Run bazel once to download and install toolchain
+echo "Installing Bazel toolchain..."
+./bin/bazel --version
+
+# Create symbolic links to tools installed by Bazel
+echo "Creating symbolic links to tools..."
+
+# Build required toolchains
+echo "Building toolchains..."
+TARGETS=(
+    "@rules_go//go"
+    "@com_google_protobuf//:protoc"
+)
+
+# Build all targets
+./bin/bazel build "${TARGETS[@]}"
+
+# Create stub scripts for each target
+for target in "${TARGETS[@]}"; do
+    # Get the binary path from bazel
+    BINARY_PATH=$(./bin/bazel cquery --output=files "$target")
+    # Extract the script name from the last component of the path
+    SCRIPT_NAME=$(basename "$BINARY_PATH")
+    # Create the stub script
+    echo "\"$(realpath "$BINARY_PATH")\" \"\$@\"" > "bin/$SCRIPT_NAME"
+    chmod +x "bin/$SCRIPT_NAME"
+done
+
+# Set up custom shell prompt
+NEW_PATH="$(pwd)/bin:$PATH"
+exec env PATH="$NEW_PATH" "$SHELL"

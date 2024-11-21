@@ -23,3 +23,13 @@ go.work.sum
 
 # env file
 .env
+
+# Bazel files
+bazel-*
+.vs/
+.idea/
+*.swp
+*.swo
+
+# used to store shortcuts to tools built by Bazel from the shell
+bin/
