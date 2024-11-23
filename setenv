@@ -47,6 +47,7 @@ echo "Building toolchains..."
 TARGETS=(
     "@rules_go//go"
     "@com_google_protobuf//:protoc"
+    "@python_3_11//:python3"
 )
 
 # Build all targets
@@ -58,8 +59,18 @@ for target in "${TARGETS[@]}"; do
     BINARY_PATH=$(./bin/bazel cquery --output=files "$target")
     # Extract the script name from the last component of the path
     SCRIPT_NAME=$(basename "$BINARY_PATH")
-    # Create the stub script
-    echo "\"$(realpath "$BINARY_PATH")\" \"\$@\"" > "bin/$SCRIPT_NAME"
+    
+    # Determine full path based on whether it's external or not
+    if [[ "$BINARY_PATH" == external/* ]]; then
+        # For external paths, prepend bazel's output_base
+        FULL_PATH="$(./bin/bazel info output_base)/$BINARY_PATH"
+    else
+        # For internal paths, use realpath
+        FULL_PATH="$(realpath "$BINARY_PATH")"
+    fi
+    
+    # Create the stub script using the determined full path
+    echo "\"$FULL_PATH\" \"\$@\"" > "bin/$SCRIPT_NAME"
     chmod +x "bin/$SCRIPT_NAME"
 done
 

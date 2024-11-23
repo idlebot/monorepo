@@ -1,5 +1,4 @@
 load("@gazelle//:def.bzl", "gazelle", "gazelle_binary")
-load("@rules_python//python:defs.bzl", "py_runtime_pair")
 load("@rules_python_gazelle_plugin//:def.bzl", "GAZELLE_PYTHON_RUNTIME_DEPS")
 
 gazelle(
@@ -19,7 +18,7 @@ gazelle_binary(
     visibility = ["//visibility:public"],
 )
 
-py_runtime_pair(
-    name = "python_runtime_pair",
-    py3_runtime = "@python_interpreter//:python_runtime",
+exports_files(
+    ["requirements_lock.txt"],
+    visibility = ["//visibility:public"],
 )
