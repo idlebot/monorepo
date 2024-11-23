@@ -39,15 +39,15 @@ fi
 echo "Installing Bazel toolchain..."
 ./bin/bazel --version
 
-# Create symbolic links to tools installed by Bazel
-echo "Creating symbolic links to tools..."
+# Create shortcuts to tools
+echo "Creating shortcuts to tools..."
 
 # Build required toolchains
 echo "Building toolchains..."
 TARGETS=(
-    "@rules_go//go"
-    "@com_google_protobuf//:protoc"
-    "@python_3_11//:python3"
+    "@rules_go//go"                     # Go compiler and tools
+    "@com_google_protobuf//:protoc"     # Protocol buffer compiler
+    "@python_3_11//:python3"            # Python 3.11 interpreter
 )
 
 # Build all targets

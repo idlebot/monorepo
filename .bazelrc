@@ -1,3 +1,6 @@
+# Bazel configuration file
+# Defines build settings for different platforms and compilation options
+
 # Enable modern C++ features
 build:linux --cxxopt=-std=c++17
 build:linux --host_cxxopt=-std=c++17

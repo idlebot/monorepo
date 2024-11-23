@@ -1,3 +1,6 @@
+# Bazel module configuration file
+# Defines external dependencies and their versions for the monorepo
+
 module(
     name = "monorepo",
     version = "0.1.0",
