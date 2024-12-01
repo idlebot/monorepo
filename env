@@ -1,0 +1,120 @@
+# Ensure script is being sourced, not executed
+if [ -n "$BASH_VERSION" ] && [ "$0" = "${BASH_SOURCE[0]}" ] || \
+   [ -n "$ZSH_VERSION" ] && [ "$0" = "$ZSH_NAME" ]; then
+    echo "Error: This script must be sourced. Please run: source $0"
+    exit 1
+fi
+
+# Get script location and set bin directory path
+if [ -n "$BASH_VERSION" ]; then
+    SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+else
+    SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
+fi
+BIN_DIR="${SCRIPT_DIR}/bin"
+
+# Create bin directory if it doesn't exist
+mkdir -p "${BIN_DIR}"
+
+# Determine OS and architecture
+OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+ARCH=$(uname -m)
+case "$ARCH" in
+    "x86_64") ARCH="amd64" ;;
+    "aarch64"|"arm64") ARCH="arm64" ;;
+esac
+
+# Construct platform string
+PLATFORM="${OS}-${ARCH}"
+
+if [ -f "$BIN_DIR/bazel" ]; then
+    # Check current version (remove any 'v' prefix for consistent comparison)
+    CURRENT_VERSION="$($BIN_DIR/bazel version | grep "Bazelisk version" | cut -d' ' -f3 | sed 's/^v//')"
+    echo "Current Bazelisk version: $CURRENT_VERSION"
+fi
+
+# Get latest version from GitHub API (remove any 'v' prefix)
+LATEST_VERSION=$(curl -s "https://api.github.com/repos/bazelbuild/bazelisk/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/^v//')
+echo "Latest Bazelisk version: $LATEST_VERSION"
+
+# Download if file doesn't exist or version is different
+if [ ! -f "$BIN_DIR/bazel" ] || [ "$CURRENT_VERSION" != "$LATEST_VERSION" ]; then
+    if [ -f "$BIN_DIR/bazel" ] && [ "$CURRENT_VERSION" = "$LATEST_VERSION" ]; then
+        echo "Bazelisk is already up to date"
+    else
+        echo "Downloading bazelisk v${LATEST_VERSION} for ${PLATFORM}..."
+        curl -L "https://github.com/bazelbuild/bazelisk/releases/download/v${LATEST_VERSION}/bazelisk-${PLATFORM}" -o "$BIN_DIR/bazel"
+        chmod +x "$BIN_DIR/bazel"
+    fi
+fi
+
+# Run bazel once to download and install toolchain
+echo "Installing Bazel toolchain..."
+"$BIN_DIR/bazel" --version
+
+# Create shortcuts to tools
+echo "Creating shortcuts to tools..."
+
+# Build required toolchains
+echo "Building toolchains..."
+# Set array declaration command based on shell type
+# Bash uses 'declare', Zsh uses 'typeset'
+if [ -n "$ZSH_VERSION" ]; then
+    echo "Zsh detected"
+    ARRAY_COMMAND="typeset"  # Zsh
+else
+    echo "Bash detected"
+    ARRAY_COMMAND="declare"  # Bash
+fi
+
+# Declare associative array using the shell-appropriate command
+echo "$ARRAY_COMMAND" -A TARGETS
+"$ARRAY_COMMAND" -A TARGETS
+TARGETS=(
+    ["@rules_go//go"]="go"
+    ["@com_google_protobuf//:protoc"]="protoc"
+    ["@python_3_11//:python3"]="python3"
+    ["@python_3_11//:py3_runtime"]="pip"
+)
+
+# Extract keys from TARGETS into BAZEL_TARGETS array
+if [ -n "$ZSH_VERSION" ]; then
+    BAZEL_TARGETS=("${(k)TARGETS[@]}")  # Proper Zsh array expansion
+else
+    BAZEL_TARGETS=("${!TARGETS[@]}")  # Bash syntax for getting keys
+fi
+echo "Building targets: $BAZEL_TARGETS"
+
+# Build the targets directly
+"$BIN_DIR/bazel" build "${BAZEL_TARGETS[@]}"
+
+# Create stub scripts for each target
+for target in "${BAZEL_TARGETS[@]}"; do
+    # Get the binary path from bazel with specific grep pattern
+    BINARY_PATH=$($BIN_DIR/bazel cquery --output=files "$target" | grep "${TARGETS[$target]}$")
+    
+    # Skip if no binary found
+    [ -z "$BINARY_PATH" ] && continue
+    
+    # Extract the script name from the last component of the path
+    SCRIPT_NAME=$(basename "$BINARY_PATH")
+    
+    # Determine full path based on whether it's external or not
+    if [[ "$BINARY_PATH" == external/* ]]; then
+        # For external paths, prepend bazel's output_base
+        FULL_PATH="$($BIN_DIR/bazel info output_base)/$BINARY_PATH"
+    else
+        # For internal paths, use realpath
+        FULL_PATH="$(realpath "$BINARY_PATH")"
+    fi
+    
+    # Create the stub script using the determined full path
+    echo "\"$FULL_PATH\" \"\$@\"" > "$BIN_DIR/$SCRIPT_NAME"
+    chmod +x "$BIN_DIR/$SCRIPT_NAME"
+done
+
+# Set up PATH if not already included
+case ":$PATH:" in
+    *":$BIN_DIR:"*) ;;
+    *) export PATH="$BIN_DIR:$PATH" ;;
+esac

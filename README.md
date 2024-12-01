@@ -1,11 +1,10 @@
-# monorepo
-Multi language Bazel monorepo proof of concept
+# Monorepo
 
-# Development Environment Setup
+Multi-language Bazel monorepo template supporting Go, Python, and C++ projects.
 
-This repository provides a standardized development environment setup using Bazel.
+## Development Environment Setup
 
-## Getting Started
+This repository provides a standardized development environment using Bazel, ensuring consistent tooling across all developers.
 
 ### Prerequisites
 
@@ -14,18 +13,23 @@ This repository provides a standardized development environment setup using Baze
 
 ### Environment Setup
 
-The `setenv` script creates an isolated shell environment with the correct PATH and tools configured for this repository. This ensures all developers use consistent tooling regardless of their local setup.
+The repository includes an environment setup script that creates an isolated shell with all necessary tools and configurations:
 
-To use it:
-
-```bash
-./setenv
+```sh
+source ./env
 ```
+
+or
+
+```sh
+. ./env
+```
+
 
 This will:
 1. Add the repository's `bin/` directory to your PATH
 2. Download and configure bazelisk (a version manager for Bazel)
-3. Launch a new shell with these configurations
+3. Provide hermetic Bazel versions for each supported language tools
 
 To exit the environment, simply type `exit` or press `Ctrl+D`.
 
