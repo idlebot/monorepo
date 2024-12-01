@@ -73,8 +73,8 @@ echo "$ARRAY_COMMAND" -A TARGETS
 TARGETS=(
     ["@rules_go//go"]="go"
     ["@com_google_protobuf//:protoc"]="protoc"
-    ["@python_3_11//:python3"]="python3"
-    ["@python_3_11//:py3_runtime"]="pip"
+    ["@python_3_13//:python3"]="python3"
+    ["@python_3_13//:py3_runtime"]="pip"
 )
 
 # Extract keys from TARGETS into BAZEL_TARGETS array
