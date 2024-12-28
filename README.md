@@ -46,6 +46,15 @@ We use [Gazelle](https://github.com/bazelbuild/bazel-gazelle) to automatically m
 bazel run //:gazelle
 ```
 
+#### Managing Python Dependencies
+
+To add new Python dependencies:
+1. Add them to `requirements.txt`
+2. Run the following command to update the lock file:
+```bash
+bazel run //:requirements.update
+```
+
 #### Building Projects
 
 To build a specific target:

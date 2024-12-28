@@ -1,5 +1,6 @@
 load("@gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@rules_python_gazelle_plugin//:def.bzl", "GAZELLE_PYTHON_RUNTIME_DEPS")
+load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 
 gazelle(
     name = "gazelle",
@@ -21,4 +22,11 @@ gazelle_binary(
 exports_files(
     ["requirements_lock.txt"],
     visibility = ["//visibility:public"],
+)
+
+# This rule adds a convenient way to update the requirements file.
+compile_pip_requirements(
+    name = "requirements",
+    src = "requirements.txt",
+    requirements_txt = "requirements_lock.txt",
 )
