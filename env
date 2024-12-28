@@ -1,16 +1,15 @@
-# Ensure script is being sourced, not executed
-if [ -n "$BASH_VERSION" ] && [ "$0" = "${BASH_SOURCE[0]}" ] || \
-   [ -n "$ZSH_VERSION" ] && [ "$0" = "$ZSH_NAME" ]; then
-    echo "Error: This script must be sourced. Please run: source $0"
+#!/bin/bash
+
+# Check if we're already in a managed environment
+if [ -n "$MANAGED_ENV" ]; then
+    echo "Error: Already in a managed environment. Please exit the current one first."
     exit 1
 fi
 
+echo "Initializing new environment..."
+
 # Get script location and set bin directory path
-if [ -n "$BASH_VERSION" ]; then
-    SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-else
-    SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
-fi
+SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
 BIN_DIR="${SCRIPT_DIR}/bin"
 
 # Create bin directory if it doesn't exist
@@ -74,7 +73,6 @@ TARGETS=(
     ["@rules_go//go"]="go"
     ["@com_google_protobuf//:protoc"]="protoc"
     ["@python_3_13//:python3"]="python3"
-    ["@python_3_13//:py3_runtime"]="pip"
 )
 
 # Extract keys from TARGETS into BAZEL_TARGETS array
@@ -113,8 +111,28 @@ for target in "${BAZEL_TARGETS[@]}"; do
     chmod +x "$BIN_DIR/$SCRIPT_NAME"
 done
 
-# Set up PATH if not already included
-case ":$PATH:" in
-    *":$BIN_DIR:"*) ;;
-    *) export PATH="$BIN_DIR:$PATH" ;;
-esac
+# Setup Python environment
+echo "Setting up Python environment..."
+
+if [ ! -f .venv/bin/activate ]; then
+    echo "Virtual environment not found, creating..."
+    "$BIN_DIR/python3" -m venv "${SCRIPT_DIR}/.venv"
+fi
+
+# shellcheck disable=SC1091
+source "${SCRIPT_DIR}/.venv/bin/activate"
+pip install -r "${SCRIPT_DIR}/requirements.txt"
+
+# Create the command to start the new shell with modified PATH
+NEW_PATH="${BIN_DIR}:${PATH}"
+
+# Start new shell with modified environment
+exec env -i \
+    HOME="$HOME" \
+    TERM="$TERM" \
+    USER="$USER" \
+    SHELL="$SHELL" \
+    PATH="$NEW_PATH" \
+    MANAGED_ENV=1 \
+    PS1="$PS1" \
+    "$SHELL"

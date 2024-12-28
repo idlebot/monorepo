@@ -16,20 +16,21 @@ This repository provides a standardized development environment using Bazel, ens
 The repository includes an environment setup script that creates an isolated shell with all necessary tools and configurations:
 
 ```sh
-source ./env
+./env
 ```
-
-or
-
-```sh
-. ./env
-```
-
 
 This will:
-1. Add the repository's `bin/` directory to your PATH
-2. Download and configure bazelisk (a version manager for Bazel)
-3. Provide hermetic Bazel versions for each supported language tools
+1. Create an isolated shell environment
+2. Add the repository's `bin/` directory to your PATH
+3. Download and configure bazelisk (a version manager for Bazel)
+4. Set up a Python virtual environment
+5. Provide hermetic Bazel versions for each supported language tools
+
+The environment is isolated, meaning:
+- Only essential environment variables are preserved
+- A new clean shell is started with minimal configuration
+- The prompt will indicate you're in the development environment
+- You cannot start nested environments
 
 To exit the environment, simply type `exit` or press `Ctrl+D`.
 
