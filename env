@@ -62,12 +62,14 @@ BAZEL_TARGETS=(
     "@rules_go//go"
     "@com_google_protobuf//:protoc"
     "@python_3_13//:python3"
+    "@buildifier_prebuilt//:buildifier"
 )
 
 BINARY_NAMES=(
     "go"
     "protoc"
     "python3"
+    "buildifier"
 )
 
 echo "Building targets: ${BAZEL_TARGETS[@]}"
