@@ -72,7 +72,7 @@ BINARY_NAMES=(
     "buildifier"
 )
 
-echo "Building targets: ${BAZEL_TARGETS[@]}"
+echo "Building targets: ${BAZEL_TARGETS[*]}"
 
 # Build the targets directly
 "$BIN_DIR/bazel" build "${BAZEL_TARGETS[@]}"
