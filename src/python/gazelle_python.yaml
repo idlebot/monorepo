@@ -1,4 +1,15 @@
-# Configuration for gazelle python extension
-manifest_name: "requirements.txt"
-pip_repository_name: "pip"
-python_interpreter: "python3"
+# GENERATED FILE - DO NOT EDIT!
+#
+# To update this file, run:
+#   bazel run //src/python:gazelle_python_manifest.update
+
+manifest:
+  modules_mapping:
+    certifi: certifi
+    charset_normalizer: charset_normalizer
+    idna: idna
+    requests: requests
+    urllib3: urllib3
+  pip_repository:
+    name: pip
+integrity: 6edc6f483ba2f1060e3a8a6ec882cfd07e14b83452b1d1c6a665a4877e17115d

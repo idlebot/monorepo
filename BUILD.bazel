@@ -1,6 +1,8 @@
 load("@gazelle//:def.bzl", "gazelle", "gazelle_binary")
-load("@rules_python_gazelle_plugin//:def.bzl", "GAZELLE_PYTHON_RUNTIME_DEPS")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+load("@rules_python_gazelle_plugin//:def.bzl", "GAZELLE_PYTHON_RUNTIME_DEPS")
+
+# gazelle:exclude .venv
 
 gazelle(
     name = "gazelle",

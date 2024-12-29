@@ -54,6 +54,14 @@ To add new Python dependencies:
 ```bash
 bazel run //:requirements.update
 ```
+3. Run the following command to update the manifest file:
+```bash
+bazel run //:gazelle_python_manifest.update
+```
+4. Run the following command to update the BUILD files:
+```bash
+bazel run //:gazelle
+```
 
 #### Building Projects
 

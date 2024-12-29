@@ -1,3 +1,6 @@
+# Tell gazelle that are python root is the same dir as this Bazel package.
+# gazelle:python_root
+
 load("@pip//:requirements.bzl", "all_whl_requirements")
 load("@rules_python_gazelle_plugin//manifest:defs.bzl", "gazelle_python_manifest")
 load("@rules_python_gazelle_plugin//modules_mapping:def.bzl", "modules_mapping")
