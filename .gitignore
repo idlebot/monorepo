@@ -33,3 +33,13 @@ bazel-*
 
 # used to store shortcuts to tools built by Bazel from the shell
 bin/
+
+# Python files
+# Python bytecode
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Python virtual environment
+.venv/
