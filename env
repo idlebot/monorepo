@@ -115,7 +115,7 @@ source "${SCRIPT_DIR}/.venv/bin/activate"
 pip install -r "${SCRIPT_DIR}/requirements.txt"
 
 # Create the command to start the new shell with modified PATH
-NEW_PATH="${BIN_DIR}:${PATH}"
+NEW_PATH="${SCRIPT_DIR}/.venv/bin:${BIN_DIR}:${PATH}"
 
 # Start new shell with modified environment
 exec env -i \
@@ -125,5 +125,7 @@ exec env -i \
     SHELL="$SHELL" \
     PATH="$NEW_PATH" \
     MANAGED_ENV=1 \
-    PS1="$PS1" \
+    VIRTUAL_ENV="${SCRIPT_DIR}/.venv" \
+    VIRTUAL_ENV_PROMPT=".venv" \
+    PYTHONPATH="${SCRIPT_DIR}/src/python" \
     "$SHELL"
