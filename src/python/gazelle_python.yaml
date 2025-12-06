@@ -3,6 +3,7 @@
 # To update this file, run:
 #   bazel run //src/python:gazelle_python_manifest.update
 
+---
 manifest:
   modules_mapping:
     certifi: certifi
@@ -12,4 +13,4 @@ manifest:
     urllib3: urllib3
   pip_repository:
     name: pip
-integrity: 6edc6f483ba2f1060e3a8a6ec882cfd07e14b83452b1d1c6a665a4877e17115d
+integrity: a8169c8d389f6697db67d58a1e174c8f0cfb35a79b50c0df1762f2d62cfc8e47
