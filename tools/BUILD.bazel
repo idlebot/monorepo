@@ -22,3 +22,24 @@ alias(
     actual = "//tools/format:dprint",
     visibility = ["//visibility:public"],
 )
+
+# golangci-lint for Go linting
+alias(
+    name = "golangci-lint",
+    actual = "@multitool//tools/golangci-lint",
+    visibility = ["//visibility:public"],
+)
+
+# ruff for Python linting/formatting
+alias(
+    name = "ruff",
+    actual = "@multitool//tools/ruff",
+    visibility = ["//visibility:public"],
+)
+
+# shellcheck for shell script linting
+alias(
+    name = "shellcheck",
+    actual = "@multitool//tools/shellcheck",
+    visibility = ["//visibility:public"],
+)

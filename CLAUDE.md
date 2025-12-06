@@ -38,9 +38,10 @@ Keep [.vscode/extensions.json](.vscode/extensions.json) and [.vscode/settings.js
 When adding new tools:
 
 1. Add to Bazel (MODULE.bazel or tools/multitool.lock.json)
-2. Add wrapper to devshell.sh if needed for CLI use
-3. Add VSCode extension to .vscode/extensions.json if applicable
-4. Add VSCode settings to .vscode/settings.json to point to bin/ wrapper
+2. Add alias to tools/BUILD.bazel (e.g., `alias(name = "mytool", actual = "@multitool//tools/mytool")`)
+3. Add to TOOLS array in devshell.sh for CLI access (all multitool binaries must be exposed)
+4. Add VSCode extension to .vscode/extensions.json if applicable
+5. Add VSCode settings to .vscode/settings.json to point to bin/ wrapper
 
 ## Project Structure
 
@@ -145,11 +146,18 @@ Formatting is enforced via [.editorconfig](.editorconfig):
 5. Add VSCode settings to `.vscode/settings.json`
 6. Update `.editorconfig` with language-specific rules
 
+## Pre-Commit Checklist
+
+Before committing changes, always verify if documentation needs updating:
+
+- **CLAUDE.md** - Update tool versions, add new conventions, or document new patterns
+- **README.md** - Update user-facing documentation (getting started, available commands, project structure)
+
 ## Current Tool Versions
 
 | Tool              | Version | Source                    |
 | ----------------- | ------- | ------------------------- |
-| Bazel             | 7.4.1   | .bazelversion             |
+| Bazel             | 8.4.2   | .bazelversion             |
 | Go                | 1.25.5  | MODULE.bazel (rules_go)   |
 | Python            | 3.14    | MODULE.bazel              |
 | Gazelle           | 0.47.0  | MODULE.bazel              |

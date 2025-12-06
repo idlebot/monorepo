@@ -31,7 +31,12 @@ TOOLS=(
   "@com_google_protobuf//:protoc:protoc"
   "@python_3_14//:python3:python3"
   "@buildifier_prebuilt//:buildifier:buildifier"
+  # Tools from multitool.lock.json
   "//tools:shfmt:shfmt"
+  "//tools:golangci-lint:golangci-lint"
+  "//tools:dprint:dprint"
+  "//tools:ruff:ruff"
+  "//tools:shellcheck:shellcheck"
 )
 
 # ------------------------------------------------------------------------------
