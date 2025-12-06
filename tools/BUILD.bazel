@@ -1,0 +1,17 @@
+# Prebuilt tool binaries
+# Tools are downloaded as prebuilt binaries for the current platform.
+# See prebuilt.bzl for configuration.
+
+alias(
+    name = "shfmt",
+    actual = "@shfmt_prebuilt//:shfmt",
+    visibility = ["//visibility:public"],
+)
+
+# Format scripts
+exports_files([
+    "format-common.sh",
+    "format-shell.sh",
+    "format-go.sh",
+    "format-buildifier.sh",
+])

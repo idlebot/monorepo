@@ -1,0 +1,10 @@
+# Go module cache
+.go
+
+# Python virtual environment
+.venv
+
+# IDE directories
+.idea
+.vscode
+

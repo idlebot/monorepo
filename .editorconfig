@@ -1,0 +1,55 @@
+# EditorConfig - https://editorconfig.org
+root = true
+
+# Default settings for all files
+[*]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Shell scripts (shfmt reads these)
+# Maps to: shfmt -i 2 -bn -ci -sr
+[*.sh]
+indent_style = space
+indent_size = 2
+shell_variant = bash
+binary_next_line = true
+switch_case_indent = true
+space_redirects = true
+
+# Go files
+[*.go]
+indent_style = tab
+
+# Makefiles require tabs
+[Makefile]
+indent_style = tab
+
+# Bazel files
+[*.bazel]
+indent_size = 4
+
+[*.bzl]
+indent_size = 4
+
+[BUILD]
+indent_size = 4
+
+[WORKSPACE]
+indent_size = 4
+
+# YAML
+[*.{yaml,yml}]
+indent_size = 2
+
+# JSON
+[*.json]
+indent_size = 2
+
+# Markdown
+[*.md]
+trim_trailing_whitespace = false
+

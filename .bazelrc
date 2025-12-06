@@ -1,10 +1,14 @@
 # Bazel configuration file
 # Defines build settings for different platforms and compilation options
 
-# Enable modern C++ features
-build:linux --cxxopt=-std=c++17
-build:linux --host_cxxopt=-std=c++17
-build:macos --cxxopt=-std=c++17
-build:macos --host_cxxopt=-std=c++17
+# Enable C++17 (required by protobuf/abseil)
+build --cxxopt=-std=c++17
+build --host_cxxopt=-std=c++17
+
+# Suppress deprecation warnings from external dependencies (protobuf/abseil)
+build --cxxopt=-Wno-deprecated-declarations
+build --host_cxxopt=-Wno-deprecated-declarations
+
+# Platform-specific overrides
 build:windows --cxxopt=/std:c++17
 build:windows --host_cxxopt=/std:c++17

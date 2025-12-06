@@ -27,10 +27,11 @@ set -euo pipefail
 # Tools to build and expose in PATH
 # Format: "bazel_target:binary_name"
 TOOLS=(
-    "@rules_go//go:go"
-    "@com_google_protobuf//:protoc:protoc"
-    "@python_3_13//:python3:python3"
-    "@buildifier_prebuilt//:buildifier:buildifier"
+  "@go_default_sdk//:bin/go:go"
+  "@com_google_protobuf//:protoc:protoc"
+  "@python_3_14//:python3:python3"
+  "@buildifier_prebuilt//:buildifier:buildifier"
+  "//tools:shfmt:shfmt"
 )
 
 # ------------------------------------------------------------------------------
@@ -46,61 +47,9 @@ BIN_DIR="${REPO_ROOT}/bin"
 # ------------------------------------------------------------------------------
 
 if [[ -n "${DEVSHELL_ACTIVE:-}" ]]; then
-    echo "Error: Already in devshell. Type 'exit' to leave first."
-    exit 1
+  echo "Error: Already in devshell. Type 'exit' to leave first."
+  exit 1
 fi
-
-# ------------------------------------------------------------------------------
-# BAZELISK SETUP
-# ------------------------------------------------------------------------------
-
-setup_bazelisk() {
-    mkdir -p "$BIN_DIR"
-
-    local os arch platform
-    os=$(uname -s | tr '[:upper:]' '[:lower:]')
-    arch=$(uname -m)
-    case "$arch" in
-        x86_64) arch="amd64" ;;
-        aarch64|arm64) arch="arm64" ;;
-    esac
-    platform="${os}-${arch}"
-
-    local current_version=""
-    if [[ -f "$BIN_DIR/bazel" ]]; then
-        current_version=$("$BIN_DIR/bazel" version 2>/dev/null | grep "Bazelisk version" | cut -d' ' -f3 | sed 's/^v//' || true)
-    fi
-
-    local latest_version
-    local release_json
-    
-    # Try to fetch release info, allowing insecure curl as fallback for some environments
-    if ! release_json=$(curl -sL "https://api.github.com/repos/bazelbuild/bazelisk/releases/latest"); then
-        release_json=$(curl -skL "https://api.github.com/repos/bazelbuild/bazelisk/releases/latest" || true)
-    fi
-
-    latest_version=$(echo "$release_json" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/^v//' || true)
-
-    if [[ -z "$latest_version" ]]; then
-        if [[ -f "$BIN_DIR/bazel" ]]; then
-             echo "⚠️  Warning: Could not check for updates. Using installed version."
-             return
-        fi
-        # Fallback version if we can't determine latest and don't have one installed
-        echo "⚠️  Warning: Could not determine latest version. Defaulting to v1.20.0"
-        latest_version="1.20.0"
-    fi
-
-    if [[ ! -f "$BIN_DIR/bazel" ]] || [[ "$current_version" != "$latest_version" ]]; then
-        echo "📦 Downloading bazelisk v${latest_version} for ${platform}..."
-        if ! curl -sL "https://github.com/bazelbuild/bazelisk/releases/download/v${latest_version}/bazelisk-${platform}" -o "$BIN_DIR/bazel"; then
-             curl -skL "https://github.com/bazelbuild/bazelisk/releases/download/v${latest_version}/bazelisk-${platform}" -o "$BIN_DIR/bazel"
-        fi
-        chmod +x "$BIN_DIR/bazel"
-    else
-        echo "✓ Bazelisk v${current_version} (up to date)"
-    fi
-}
 
 # ------------------------------------------------------------------------------
 # TOOL WRAPPER GENERATORS
@@ -108,10 +57,10 @@ setup_bazelisk() {
 
 # Default wrapper - just executes the binary
 generate_default_wrapper() {
-    local binary_path="$1"
-    local runfiles_dir="$2"
-    
-    cat << EOF
+  local binary_path="$1"
+  local runfiles_dir="$2"
+
+  cat << EOF
 #!/bin/bash
 export RUNFILES_DIR="$runfiles_dir"
 exec "$binary_path" "\$@"
@@ -120,13 +69,16 @@ EOF
 
 # Go wrapper - needs GOROOT and GOTOOLCHAIN handling
 generate_go_wrapper() {
-    local binary_path="$1"
-    local runfiles_dir="$2"
-    
-    cat << EOF
+  local binary_path="$1"
+  local runfiles_dir="$2"
+
+  # GOROOT is the SDK root (parent of bin/)
+  local goroot
+  goroot="$(dirname "$(dirname "$binary_path")")"
+
+  cat << EOF
 #!/bin/bash
-export RUNFILES_DIR="$runfiles_dir"
-export GOROOT="$runfiles_dir/go_sdk"
+export GOROOT="$goroot"
 export GOTOOLCHAIN=local
 exec "$binary_path" "\$@"
 EOF
@@ -134,10 +86,10 @@ EOF
 
 # Python wrapper - ensure clean environment
 generate_python3_wrapper() {
-    local binary_path="$1"
-    local runfiles_dir="$2"
-    
-    cat << EOF
+  local binary_path="$1"
+  local runfiles_dir="$2"
+
+  cat << EOF
 #!/bin/bash
 export RUNFILES_DIR="$runfiles_dir"
 exec "$binary_path" "\$@"
@@ -149,61 +101,61 @@ EOF
 # ------------------------------------------------------------------------------
 
 build_tools() {
-    local targets=()
-    for tool in "${TOOLS[@]}"; do
-        local target="${tool%:*}"
-        targets+=("$target")
-    done
+  local targets=()
+  for tool in "${TOOLS[@]}"; do
+    local target="${tool%:*}"
+    targets+=("$target")
+  done
 
-    echo ""
-    echo "🔨 Building tools..."
-    "$BIN_DIR/bazel" build "${targets[@]}"
+  echo ""
+  echo "🔨 Building tools..."
+  bazel build "${targets[@]}"
 }
 
 install_tool_wrappers() {
-    echo ""
-    echo "📝 Creating tool wrappers..."
+  echo ""
+  echo "📝 Creating tool wrappers..."
 
-    local output_base
-    output_base=$("$BIN_DIR/bazel" info output_base)
+  local output_base
+  output_base=$(bazel info output_base)
 
-    for tool in "${TOOLS[@]}"; do
-        local target="${tool%:*}"
-        local binary_name="${tool##*:}"
+  for tool in "${TOOLS[@]}"; do
+    local target="${tool%:*}"
+    local binary_name="${tool##*:}"
 
-        # Get binary path from bazel
-        local binary_path
-        binary_path=$("$BIN_DIR/bazel" cquery --output=files "$target" 2>/dev/null | grep "${binary_name}$" | head -1 || true)
+    # Get binary path from bazel
+    local binary_path
+    binary_path=$(bazel cquery --output=files "$target" 2> /dev/null | grep "${binary_name}$" | head -1 || true)
 
-        if [[ -z "$binary_path" ]]; then
-            echo "  ✗ $binary_name: binary not found"
-            continue
-        fi
+    if [[ -z "$binary_path" ]]; then
+      echo "  ✗ $binary_name: binary not found"
+      continue
+    fi
 
-        # Resolve full path
-        local full_path runfiles_dir
-        if [[ "$binary_path" == external/* ]]; then
-            full_path="$output_base/$binary_path"
-            runfiles_dir="$output_base/$(dirname "$binary_path").runfiles"
-        else
-            full_path="$(realpath "$binary_path")"
-            runfiles_dir="$(dirname "$full_path").runfiles"
-        fi
+    # Resolve full path
+    local full_path runfiles_dir
+    if [[ "$binary_path" == external/* ]]; then
+      full_path="$output_base/$binary_path"
+      runfiles_dir="$output_base/$(dirname "$binary_path").runfiles"
+    else
+      full_path="$(realpath "$binary_path")"
+      runfiles_dir="$(dirname "$full_path").runfiles"
+    fi
 
-        # Generate appropriate wrapper
-        local wrapper_func="generate_default_wrapper"
-        if declare -f "generate_${binary_name}_wrapper" > /dev/null; then
-            wrapper_func="generate_${binary_name}_wrapper"
-        fi
+    # Generate appropriate wrapper
+    local wrapper_func="generate_default_wrapper"
+    if declare -f "generate_${binary_name}_wrapper" > /dev/null; then
+      wrapper_func="generate_${binary_name}_wrapper"
+    fi
 
-        "$wrapper_func" "$full_path" "$runfiles_dir" > "$BIN_DIR/$binary_name"
-        chmod +x "$BIN_DIR/$binary_name"
+    "$wrapper_func" "$full_path" "$runfiles_dir" > "$BIN_DIR/$binary_name"
+    chmod +x "$BIN_DIR/$binary_name"
 
-        # Show version if possible
-        local version
-        version=$("$BIN_DIR/$binary_name" --version 2>/dev/null | head -1 || echo "installed")
-        echo "  ✓ $binary_name: $version"
-    done
+    # Show version if possible
+    local version
+    version=$("$BIN_DIR/$binary_name" --version 2> /dev/null | head -1 || echo "installed")
+    echo "  ✓ $binary_name: $version"
+  done
 }
 
 # ------------------------------------------------------------------------------
@@ -211,24 +163,24 @@ install_tool_wrappers() {
 # ------------------------------------------------------------------------------
 
 setup_python_venv() {
-    echo ""
-    echo "🐍 Setting up Python environment..."
+  echo ""
+  echo "🐍 Setting up Python environment..."
 
-    local venv_dir="$REPO_ROOT/.venv"
-    
-    if [[ ! -f "$venv_dir/bin/activate" ]]; then
-        echo "  Creating virtual environment..."
-        "$BIN_DIR/python3" -m venv "$venv_dir"
-    fi
+  local venv_dir="$REPO_ROOT/.venv"
 
-    # shellcheck disable=SC1091
-    source "$venv_dir/bin/activate"
+  if [[ ! -f "$venv_dir/bin/activate" ]]; then
+    echo "  Creating virtual environment..."
+    "$BIN_DIR/python3" -m venv "$venv_dir"
+  fi
 
-    if [[ -f "$REPO_ROOT/requirements.txt" ]]; then
-        pip install -q -r "$REPO_ROOT/requirements.txt"
-    fi
+  # shellcheck disable=SC1091
+  source "$venv_dir/bin/activate"
 
-    echo "  ✓ Virtual environment ready"
+  if [[ -f "$REPO_ROOT/requirements.txt" ]]; then
+    pip install -q -r "$REPO_ROOT/requirements.txt"
+  fi
+
+  echo "  ✓ Virtual environment ready"
 }
 
 # ------------------------------------------------------------------------------
@@ -236,23 +188,51 @@ setup_python_venv() {
 # ------------------------------------------------------------------------------
 
 launch_shell() {
-    local new_path="$REPO_ROOT/.venv/bin:$BIN_DIR:$PATH"
+  local new_path="$REPO_ROOT/.venv/bin:$BIN_DIR:$PATH"
 
-    echo ""
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "  DEVSHELL ready! Tools available: ${TOOLS[*]##*:}"
-    echo "  Type 'exit' to leave"
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo ""
+  echo ""
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "  DEVSHELL ready! Tools available: ${TOOLS[*]##*:}"
+  echo "  Type 'exit' to leave"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo ""
 
-    exec env \
+  # Create a temporary rc file for the shell
+  local rc_file
+  rc_file=$(mktemp)
+
+  # Create shell-specific rc file with custom prompt
+  case "${SHELL:-/bin/bash}" in
+    */zsh)
+      local zsh_dir
+      zsh_dir=$(mktemp -d)
+      cat > "$zsh_dir/.zshrc" << 'ZSHRC'
+[[ -f ~/.zshrc ]] && source ~/.zshrc
+PROMPT='%F{cyan}[devshell]%f %F{blue}%1~%f %# '
+ZSHRC
+      exec env \
         PATH="$new_path" \
         DEVSHELL_ACTIVE=1 \
         VIRTUAL_ENV="$REPO_ROOT/.venv" \
-        VIRTUAL_ENV_PROMPT="devshell" \
         PYTHONPATH="$REPO_ROOT/src/python" \
         GOPATH="$REPO_ROOT/.go" \
-        "${SHELL:-/bin/bash}"
+        ZDOTDIR="$zsh_dir" \
+        zsh
+      ;;
+    *)
+      cat > "$rc_file" << 'BASHRC'
+[[ -f ~/.bashrc ]] && source ~/.bashrc
+PS1='\[\033[1;36m\][devshell]\[\033[0m\] \[\033[1;34m\]\W\[\033[0m\] \$ '
+BASHRC
+      exec env \
+        PATH="$new_path" \
+        DEVSHELL_ACTIVE=1 \
+        VIRTUAL_ENV="$REPO_ROOT/.venv" \
+        PYTHONPATH="$REPO_ROOT/src/python" \
+        GOPATH="$REPO_ROOT/.go" \
+        bash --rcfile "$rc_file"
+      ;;
+  esac
 }
 
 # ------------------------------------------------------------------------------
@@ -260,20 +240,19 @@ launch_shell() {
 # ------------------------------------------------------------------------------
 
 main() {
-    echo ""
-    echo "┌─────────────────────────────────────────────────────────────────────┐"
-    echo "│  DEVSHELL - Bazel Development Environment                          │"
-    echo "└─────────────────────────────────────────────────────────────────────┘"
-    echo ""
+  echo ""
+  echo "┌─────────────────────────────────────────────────────────────────────┐"
+  echo "│  DEVSHELL - Bazel Development Environment                           │"
+  echo "└─────────────────────────────────────────────────────────────────────┘"
+  echo ""
 
-    cd "$REPO_ROOT"
+  cd "$REPO_ROOT"
+  mkdir -p "$BIN_DIR"
 
-    setup_bazelisk
-    build_tools
-    install_tool_wrappers
-    setup_python_venv
-    launch_shell
+  build_tools
+  install_tool_wrappers
+  setup_python_venv
+  launch_shell
 }
 
 main "$@"
-

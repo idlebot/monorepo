@@ -1,0 +1,8 @@
+{
+  "bazel.buildifierFixOnFormat": true,
+  "editor.formatOnSave": true,
+  "shfmt.executablePath": "bin/shfmt",
+  "[shellscript]": {
+    "editor.defaultFormatter": "mkhl.shfmt"
+  }
+}

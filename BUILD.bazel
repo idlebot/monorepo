@@ -1,8 +1,55 @@
 load("@gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
 load("@rules_python_gazelle_plugin//:def.bzl", "GAZELLE_PYTHON_RUNTIME_DEPS")
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+load("//tools:format.bzl", "format_multi")
 
 # gazelle:exclude .venv
+
+# ==============================================================================
+# FORMAT TARGETS
+# ==============================================================================
+
+sh_binary(
+    name = "format-shell",
+    srcs = ["//tools:format-shell.sh"],
+    data = [
+        "//tools:format-common.sh",
+        "//tools:shfmt",
+    ],
+    deps = ["@bazel_tools//tools/bash/runfiles"],
+)
+
+sh_binary(
+    name = "format-go",
+    srcs = ["//tools:format-go.sh"],
+    data = [
+        "//tools:format-common.sh",
+        "@go_default_sdk//:bin/go",
+    ],
+    deps = ["@bazel_tools//tools/bash/runfiles"],
+)
+
+sh_binary(
+    name = "format-buildifier",
+    srcs = ["//tools:format-buildifier.sh"],
+    data = [
+        "//tools:format-common.sh",
+        "@buildifier_prebuilt//:buildifier",
+    ],
+    deps = ["@bazel_tools//tools/bash/runfiles"],
+)
+
+format_multi(
+    name = "format",
+    targets = [
+        "//:format-shell",
+        "//:format-go",
+        "//:format-buildifier",
+    ],
+)
+
+# ==============================================================================
 
 gazelle(
     name = "gazelle",
