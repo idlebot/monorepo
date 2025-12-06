@@ -2,16 +2,25 @@
 # Tools are downloaded as prebuilt binaries for the current platform.
 # See prebuilt.bzl for configuration.
 
+# shfmt alias for devshell.sh (IDE integration via bin/shfmt)
 alias(
     name = "shfmt",
     actual = "@shfmt_prebuilt//:shfmt",
     visibility = ["//visibility:public"],
 )
 
-# Format scripts
-exports_files([
-    "format-common.sh",
-    "format-shell.sh",
-    "format-go.sh",
-    "format-buildifier.sh",
-])
+# dprint raw binary alias
+alias(
+    name = "dprint_bin",
+    actual = "@dprint_prebuilt//:dprint",
+    visibility = ["//visibility:public"],
+)
+
+# dprint wrapper for rules_lint (translates --write to fmt subcommand)
+sh_binary(
+    name = "dprint",
+    srcs = ["dprint-fmt.sh"],
+    data = ["@dprint_prebuilt//:dprint"],
+    visibility = ["//visibility:public"],
+    deps = ["@bazel_tools//tools/bash/runfiles"],
+)

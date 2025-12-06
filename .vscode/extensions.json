@@ -2,6 +2,11 @@
   "recommendations": [
     "bazelbuild.vscode-bazel",
     "editorconfig.editorconfig",
-    "mkhl.shfmt"
+    "golang.go",
+    "mkhl.shfmt",
+    "ms-python.debugpy",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "timonwong.shellcheck",
   ]
 }

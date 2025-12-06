@@ -50,6 +50,7 @@ bazel run //path/to/target
 ```
 
 Example - run the Go hello world:
+
 ```bash
 bazel run //src/go/helloworld
 ```
@@ -57,11 +58,13 @@ bazel run //src/go/helloworld
 ### Formatting Code
 
 Format all code in the repository:
+
 ```bash
 bazel run //:format
 ```
 
 Or format specific languages:
+
 ```bash
 bazel run //:format-shell      # Shell scripts (shfmt)
 bazel run //:format-go         # Go files (gofmt)

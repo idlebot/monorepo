@@ -1,0 +1,13 @@
+{
+  "markdown": {},
+  "includes": ["**/*.md"],
+  "excludes": [
+    "**/node_modules",
+    "**/.git",
+    "**/bazel-*",
+    "**/.venv"
+  ],
+  "plugins": [
+    "https://plugins.dprint.dev/markdown-0.17.8.wasm"
+  ]
+}

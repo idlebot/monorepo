@@ -4,5 +4,6 @@
   "shfmt.executablePath": "bin/shfmt",
   "[shellscript]": {
     "editor.defaultFormatter": "mkhl.shfmt"
-  }
+  },
+  "files.autoSave": "onFocusChange"
 }
