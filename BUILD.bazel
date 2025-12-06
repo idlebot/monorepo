@@ -27,6 +27,12 @@ alias(
     actual = "//tools/lint",
 )
 
+# Devshell script (included here so it gets linted by shellcheck)
+sh_binary(
+    name = "devshell",
+    srcs = ["devshell.sh"],
+)
+
 # ==============================================================================
 
 gazelle(
@@ -49,6 +55,7 @@ gazelle_binary(
 exports_files(
     [
         "requirements_lock.txt",
+        ".golangci.yml",
         ".ruff.toml",
         ".shellcheckrc",
     ],

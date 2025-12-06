@@ -1,0 +1,27 @@
+# golangci-lint v2 configuration
+# See https://golangci-lint.run/docs/configuration/
+
+version: "2"
+
+linters:
+  default: none
+  enable:
+    # Core linters
+    - errcheck      # Check for unchecked errors
+    - govet         # Go vet checks
+    - ineffassign   # Detect ineffectual assignments
+    - staticcheck   # Static analysis checks
+    - unused        # Check for unused code
+    # Additional linters
+    - misspell      # Spell checking
+
+issues:
+  # Don't skip any issues
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+output:
+  # Sort results by file, line number, and column
+  sort-order:
+    - file
+    - linter

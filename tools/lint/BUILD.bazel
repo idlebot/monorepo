@@ -2,6 +2,7 @@
 # See linters.bzl for aspect definitions
 
 exports_files([
+    "golangci_lint.bzl",
     "lint.sh",
     "linters.bzl",
 ])

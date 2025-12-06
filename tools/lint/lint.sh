@@ -14,6 +14,7 @@ echo "========================================"
 
 # Define the aspects to run
 ASPECTS=(
+  "//tools/lint:linters.bzl%golangci_lint"
   "//tools/lint:linters.bzl%ruff"
   "//tools/lint:linters.bzl%shellcheck"
 )
@@ -41,9 +42,12 @@ echo "========================================"
 found_issues=0
 while IFS= read -r report; do
   if [[ -s "$report" ]]; then
-    # Skip reports that only contain "All checks passed!" or are empty
+    # Skip reports that indicate no issues
     content=$(cat "$report")
-    if [[ -n "$content" && "$content" != "All checks passed!" ]]; then
+    # Check for various "no issues" patterns
+    if [[ -n "$content" && \
+          "$content" != "All checks passed!" && \
+          ! "$content" =~ ^[[:space:]]*0[[:space:]]+issues\.[[:space:]]*$ ]]; then
       found_issues=1
       echo ""
       echo "$content"

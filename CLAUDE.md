@@ -89,16 +89,17 @@ Formatters:
 ### Linting
 
 ```bash
-bazel run //:lint                # Lint all targets (Python, Shell)
+bazel run //:lint                # Lint all targets (Go, Python, Shell)
 bazel run //:lint //src/...      # Lint specific package
 ```
 
 Linters:
 
+- **Go**: golangci-lint v2
 - **Python**: ruff
 - **Shell**: shellcheck
 
-Linting runs via Bazel aspects on `*_library` and `*_binary` targets. Config files: [.ruff.toml](.ruff.toml), [.shellcheckrc](.shellcheckrc).
+Linting runs via Bazel aspects on `*_library` and `*_binary` targets. Config files: [.golangci.yml](.golangci.yml), [.ruff.toml](.ruff.toml), [.shellcheckrc](.shellcheckrc).
 
 ### BUILD File Generation
 
@@ -154,6 +155,7 @@ Formatting is enforced via [.editorconfig](.editorconfig):
 | Gazelle           | 0.47.0  | MODULE.bazel              |
 | Buildifier        | 8.2.1.1 | MODULE.bazel              |
 | aspect_rules_lint | 1.3.1   | MODULE.bazel              |
+| golangci-lint     | 2.7.1   | tools/multitool.lock.json |
 | ruff              | 0.8.4   | tools/multitool.lock.json |
 | shellcheck        | 0.10.0  | tools/multitool.lock.json |
 | dprint            | 0.50.2  | tools/multitool.lock.json |
