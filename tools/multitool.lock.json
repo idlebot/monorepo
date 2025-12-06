@@ -1,0 +1,143 @@
+{
+  "$schema": "https://raw.githubusercontent.com/theoremlp/rules_multitool/main/lockfile.schema.json",
+  "dprint": {
+    "binaries": [
+      {
+        "kind": "archive",
+        "url": "https://github.com/dprint/dprint/releases/download/0.50.2/dprint-aarch64-unknown-linux-gnu.zip",
+        "file": "dprint",
+        "sha256": "039d4dca4360cb6622a2b56c3fc29ea71c356cd954e0b9566bff1a70e75beda8",
+        "os": "linux",
+        "cpu": "arm64"
+      },
+      {
+        "kind": "archive",
+        "url": "https://github.com/dprint/dprint/releases/download/0.50.2/dprint-x86_64-unknown-linux-gnu.zip",
+        "file": "dprint",
+        "sha256": "95c7e633a67531ffc4990c152d59ed0802e1c0caf7e27e424e9cea9ef3d499d4",
+        "os": "linux",
+        "cpu": "x86_64"
+      },
+      {
+        "kind": "archive",
+        "url": "https://github.com/dprint/dprint/releases/download/0.50.2/dprint-aarch64-apple-darwin.zip",
+        "file": "dprint",
+        "sha256": "f534bcc054947ab2a42c069b5f6027914d252729bd15c1109812313b35a662a5",
+        "os": "macos",
+        "cpu": "arm64"
+      },
+      {
+        "kind": "archive",
+        "url": "https://github.com/dprint/dprint/releases/download/0.50.2/dprint-x86_64-apple-darwin.zip",
+        "file": "dprint",
+        "sha256": "61becbf8d1b16540e364a4f00be704266ae322ee0ff3ba66a4a21033f66a8d55",
+        "os": "macos",
+        "cpu": "x86_64"
+      }
+    ]
+  },
+  "ruff": {
+    "binaries": [
+      {
+        "kind": "archive",
+        "url": "https://github.com/astral-sh/ruff/releases/download/0.8.4/ruff-aarch64-unknown-linux-musl.tar.gz",
+        "file": "ruff-aarch64-unknown-linux-musl/ruff",
+        "sha256": "c497a751d87c09d0e0185bd4c9f221b35003dbc5611c46df00b55e48e6b8fdd5",
+        "os": "linux",
+        "cpu": "arm64"
+      },
+      {
+        "kind": "archive",
+        "url": "https://github.com/astral-sh/ruff/releases/download/0.8.4/ruff-x86_64-unknown-linux-musl.tar.gz",
+        "file": "ruff-x86_64-unknown-linux-musl/ruff",
+        "sha256": "6c95a04d3c589dac62adc1538c72e5cc100031da04b9bfec639a195cf8dbb017",
+        "os": "linux",
+        "cpu": "x86_64"
+      },
+      {
+        "kind": "archive",
+        "url": "https://github.com/astral-sh/ruff/releases/download/0.8.4/ruff-aarch64-apple-darwin.tar.gz",
+        "file": "ruff-aarch64-apple-darwin/ruff",
+        "sha256": "8893f3ede33a73740f69b10ee9356e5cf2933c0afe146f00176be12ef91bf9d9",
+        "os": "macos",
+        "cpu": "arm64"
+      },
+      {
+        "kind": "archive",
+        "url": "https://github.com/astral-sh/ruff/releases/download/0.8.4/ruff-x86_64-apple-darwin.tar.gz",
+        "file": "ruff-x86_64-apple-darwin/ruff",
+        "sha256": "b47e45fe5bf128eaaeaf9f477388934586d00c2c16469034c770d93ceb655a16",
+        "os": "macos",
+        "cpu": "x86_64"
+      }
+    ]
+  },
+  "shellcheck": {
+    "binaries": [
+      {
+        "kind": "archive",
+        "url": "https://github.com/koalaman/shellcheck/releases/download/v0.10.0/shellcheck-v0.10.0.linux.aarch64.tar.xz",
+        "file": "shellcheck-v0.10.0/shellcheck",
+        "sha256": "324a7e89de8fa2aed0d0c28f3dab59cf84c6d74264022c00c22af665ed1a09bb",
+        "os": "linux",
+        "cpu": "arm64"
+      },
+      {
+        "kind": "archive",
+        "url": "https://github.com/koalaman/shellcheck/releases/download/v0.10.0/shellcheck-v0.10.0.linux.x86_64.tar.xz",
+        "file": "shellcheck-v0.10.0/shellcheck",
+        "sha256": "6c881ab0698e4e6ea235245f22832860544f17ba386442fe7e9d629f8cbedf87",
+        "os": "linux",
+        "cpu": "x86_64"
+      },
+      {
+        "kind": "archive",
+        "url": "https://github.com/koalaman/shellcheck/releases/download/v0.10.0/shellcheck-v0.10.0.darwin.aarch64.tar.xz",
+        "file": "shellcheck-v0.10.0/shellcheck",
+        "sha256": "bbd2f14826328eee7679da7221f2bc3afb011f6a928b848c80c321f6046ddf81",
+        "os": "macos",
+        "cpu": "arm64"
+      },
+      {
+        "kind": "archive",
+        "url": "https://github.com/koalaman/shellcheck/releases/download/v0.10.0/shellcheck-v0.10.0.darwin.x86_64.tar.xz",
+        "file": "shellcheck-v0.10.0/shellcheck",
+        "sha256": "ef27684f23279d112d8ad84e0823642e43f838993bbb8c0963db9b58a90464c2",
+        "os": "macos",
+        "cpu": "x86_64"
+      }
+    ]
+  },
+  "shfmt": {
+    "binaries": [
+      {
+        "kind": "file",
+        "url": "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_arm64",
+        "sha256": "5f3fe3fa6a9f766e6a182ba79a94bef8afedafc57db0b1ad32b0f67fae971ba4",
+        "os": "linux",
+        "cpu": "arm64"
+      },
+      {
+        "kind": "file",
+        "url": "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_amd64",
+        "sha256": "d9fbb2a9c33d13f47e7618cf362a914d029d02a6df124064fff04fd688a745ea",
+        "os": "linux",
+        "cpu": "x86_64"
+      },
+      {
+        "kind": "file",
+        "url": "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_darwin_arm64",
+        "sha256": "d903802e0ce3ecbc82b98512f55ba370b0d37a93f3f78de394f5b657052b33dd",
+        "os": "macos",
+        "cpu": "arm64"
+      },
+      {
+        "kind": "file",
+        "url": "https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_darwin_amd64",
+        "sha256": "c31548693de6584e6164b7ed5fbb7b4a083f2d937ca94b4e0ddf59aa461a85e4",
+        "os": "macos",
+        "cpu": "x86_64"
+      }
+    ]
+  }
+}

@@ -1,26 +1,24 @@
 # Prebuilt tool binaries
-# Tools are downloaded as prebuilt binaries for the current platform.
-# See prebuilt.bzl for configuration.
+# Tools are downloaded via rules_multitool.
+# See multitool.lock.json for versions and checksums.
 
 # shfmt alias for devshell.sh (IDE integration via bin/shfmt)
 alias(
     name = "shfmt",
-    actual = "@shfmt_prebuilt//:shfmt",
+    actual = "@multitool//tools/shfmt",
     visibility = ["//visibility:public"],
 )
 
 # dprint raw binary alias
 alias(
     name = "dprint_bin",
-    actual = "@dprint_prebuilt//:dprint",
+    actual = "@multitool//tools/dprint",
     visibility = ["//visibility:public"],
 )
 
-# dprint wrapper for rules_lint (translates --write to fmt subcommand)
-sh_binary(
+# dprint wrapper (moved to tools/format for consistency with tools/lint)
+alias(
     name = "dprint",
-    srcs = ["dprint-fmt.sh"],
-    data = ["@dprint_prebuilt//:dprint"],
+    actual = "//tools/format:dprint",
     visibility = ["//visibility:public"],
-    deps = ["@bazel_tools//tools/bash/runfiles"],
 )

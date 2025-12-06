@@ -1,0 +1,10 @@
+# Format tool wrappers
+
+# dprint wrapper for rules_lint (translates --write to fmt subcommand)
+sh_binary(
+    name = "dprint",
+    srcs = ["dprint-fmt.sh"],
+    data = ["@multitool//tools/dprint"],
+    visibility = ["//visibility:public"],
+    deps = ["@bazel_tools//tools/bash/runfiles"],
+)

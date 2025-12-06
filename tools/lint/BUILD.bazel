@@ -1,0 +1,13 @@
+# Lint tool configurations
+# See linters.bzl for aspect definitions
+
+exports_files([
+    "lint.sh",
+    "linters.bzl",
+])
+
+sh_binary(
+    name = "lint",
+    srcs = ["lint.sh"],
+    visibility = ["//visibility:public"],
+)

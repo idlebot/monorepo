@@ -19,6 +19,15 @@ format_multirun(
 )
 
 # ==============================================================================
+# LINT TARGETS
+# ==============================================================================
+
+alias(
+    name = "lint",
+    actual = "//tools/lint",
+)
+
+# ==============================================================================
 
 gazelle(
     name = "gazelle",
@@ -38,7 +47,11 @@ gazelle_binary(
 )
 
 exports_files(
-    ["requirements_lock.txt"],
+    [
+        "requirements_lock.txt",
+        ".ruff.toml",
+        ".shellcheckrc",
+    ],
     visibility = ["//visibility:public"],
 )
 
